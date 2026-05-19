@@ -12,3 +12,11 @@ class Role(BaseModel):
     name: str
     role_id: int
     # TODO: add intents and update descriptions
+
+
+class Channel(BaseModel):
+    name: str
+    channel_id: int
+    channel_description: str
+    channel_type: str
+    # TODO: add perms to channel
