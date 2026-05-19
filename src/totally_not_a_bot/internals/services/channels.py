@@ -79,7 +79,7 @@ def delete_channel(channel_id: int):
 
     Args:
         channel_id (int): The ID of the channel to delete
-    
+
     Returns:
         None
     """

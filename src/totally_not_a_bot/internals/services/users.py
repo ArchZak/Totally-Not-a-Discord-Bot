@@ -13,7 +13,7 @@ def get_user_info(user_id: int):
     """
 
 
-def get_user_stats(user_id: int): #there are bots that do this idk
+def get_user_stats(user_id: int):  # there are bots that do this idk
     pass
 
 
