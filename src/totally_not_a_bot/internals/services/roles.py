@@ -77,7 +77,9 @@ def delete_role(role_id: int):
     """
 
 
-def bulk_assign_role_to_users(user_ids: list[int], role_id: int): #make bulk versions a decision layer action
+def bulk_assign_role_to_users(
+    user_ids: list[int], role_id: int
+):  # make bulk versions a decision layer action
     pass
 
 
