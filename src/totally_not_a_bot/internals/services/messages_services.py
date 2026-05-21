@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Annotated, Optional
 
+from discord import Emoji, PartialEmoji, Reaction
+
 import dto.channels_dto as channels_dto
 from config.models import Message
 
@@ -135,35 +137,41 @@ def delete_message(message_id: int):
     pass
 
 
-def add_reaction(message_id: int, emoji: str):
+async def add_reaction_service(channel_id: int, message_id: int, emoji: Annotated[str, Emoji, PartialEmoji, Reaction, "the emoji to add"]): 
     """
     Add a reaction to a specific message.
 
     Args:
+        channel_id (int): The ID of the channel containing the message
         message_id (int): The ID of the message to react to
         emoji (str): The emoji to add as a reaction
 
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    await message.add_reaction(emoji)
 
 
-def remove_reaction(message_id: int, emoji: str):
+async def remove_reaction_service(channel_id: int, message_id: int, emoji: Annotated[str, Emoji, PartialEmoji, Reaction, "the emoji to remove"]):
     """
     Remove a reaction sent by the bot from a specific message.
 
     Args:
+        channel_id (int): The ID of the channel containing the message
         message_id (int): The ID of the message to remove the reaction from
         emoji (str): The emoji to remove as a reaction
 
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    await message.remove_reaction(emoji)
 
 
-def delete_messages(message_ids: list[int]):
+async def delete_messages_service(message_ids: list[int]): #bulk actions should be decision layer prob
     """
     Delete multiple messages at once sent by the bot.
 
