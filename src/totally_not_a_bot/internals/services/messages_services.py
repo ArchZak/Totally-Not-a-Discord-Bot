@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Annotated, Optional
 
+import dto.channels_dto as channels_dto
 from config.models import Message
 
 # region Message Resources
@@ -175,30 +176,42 @@ def delete_messages(message_ids: list[int]):
     pass
 
 
-def pin_message(message_id: int):
+async def pin_message_service(
+    channel_id: int, message_id: int, reason: Optional[str] = None
+):
     """
     Pin a specific message.
 
     Args:
+        channel_id (int): The ID of the channel containing the message
         message_id (int): The ID of the message to pin
+        reason (str, optional): The reason for pinning the message. Defaults to None
 
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    await message.pin(reason=reason)
 
 
-def unpin_message(message_id: int):
+async def unpin_message_service(
+    channel_id: int, message_id: int, reason: Optional[str] = None
+):
     """
     Unpin a specific message.
 
     Args:
+        channel_id (int): The ID of the channel containing the message
         message_id (int): The ID of the message to unpin
+        reason (str, optional): The reason for unpinning the message. Defaults to None
 
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    await message.unpin(reason=reason)
 
 
 # endregion
