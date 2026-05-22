@@ -62,7 +62,7 @@ def get_message_states_service():
 # region Message Tools
 
 
-def send_message_service(
+async def send_message_service(
     channel_id: int, content: str, reply_to_message_id: Optional[int] = None
 ):
     """
@@ -76,7 +76,12 @@ def send_message_service(
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    if reply_to_message_id:
+        message_to_reply_to = await channel.fetch_message(reply_to_message_id)
+        await message_to_reply_to.reply(content)
+    else:
+        await channel.send(content)
 
 
 async def edit_message_service(channel_id: int, message_id: int, new_content: str):
