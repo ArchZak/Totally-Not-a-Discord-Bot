@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Annotated, Optional
 
 import dto.channels_dto as channels_dto
+from config.exceptions import MessageOwnershipError
 from config.models import Message
 from discord import Emoji, PartialEmoji, Reaction
 
@@ -107,6 +108,8 @@ async def delete_message_service(channel_id: int, message_id: int):
     message = await channel.fetch_message(message_id)
     if message.author.id == channels_dto.get_bot_id_dto():
         await message.delete()
+    else:
+        raise MessageOwnershipError("You can only delete messages sent by the bot.")
 
 
 def send_embed_service(
