@@ -1,5 +1,6 @@
 from server import _client
 
+
 def get_bot_id_dto():
     """
     Get the bot's user ID.
