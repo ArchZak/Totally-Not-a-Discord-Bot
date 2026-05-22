@@ -79,18 +79,24 @@ def send_message_service(
     pass
 
 
-def edit_message_service(message_id: int, new_content: str):
+async def edit_message_service(channel_id: int, message_id: int, new_content: str):
     """
     Edit an existing message sent by the bot.
 
     Args:
+        channel_id (int): The ID of the channel containing the message
         message_id (int): The ID of the message to edit
         new_content (str): The new content for the message
 
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    if message.author.id == channels_dto.get_bot_id_dto():
+        await message.edit(content=new_content)
+    else:
+        raise MessageOwnershipError("You can only edit messages sent by the bot.")
 
 
 async def delete_message_service(channel_id: int, message_id: int):
