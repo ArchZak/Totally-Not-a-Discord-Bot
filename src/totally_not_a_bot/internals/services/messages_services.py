@@ -8,7 +8,7 @@ from discord import Emoji, PartialEmoji, Reaction
 # region Message Resources
 
 
-def get_recent_messages(
+def get_recent_messages_service(
     channel_id: int,
     limit: int = 20,
     timestamp: Annotated[Optional[datetime], "Filter messages newer than this"] = None,
@@ -27,11 +27,11 @@ def get_recent_messages(
     pass
 
 
-def get_messages_by_filter():
+def get_messages_by_filter_service():
     pass
 
 
-def get_pinned_messages(channel_id: int) -> list[Message]:
+def get_pinned_messages_service(channel_id: int) -> list[Message]:
     """
     Fetch all the pinned messages in a specific channel.
 
@@ -44,15 +44,15 @@ def get_pinned_messages(channel_id: int) -> list[Message]:
     pass
 
 
-def get_messages_in_context_window():
+def get_messages_in_context_window_service():
     pass
 
 
-def get_threads_to_message():
+def get_threads_to_message_service():
     pass
 
 
-def get_message_states():
+def get_message_states_service():
     pass
 
 
@@ -61,7 +61,7 @@ def get_message_states():
 # region Message Tools
 
 
-def send_message(
+def send_message_service(
     channel_id: int, content: str, reply_to_message_id: Optional[int] = None
 ):
     """
@@ -78,7 +78,7 @@ def send_message(
     pass
 
 
-def edit_message(message_id: int, new_content: str):
+def edit_message_service(message_id: int, new_content: str):
     """
     Edit an existing message sent by the bot.
 
@@ -92,7 +92,24 @@ def edit_message(message_id: int, new_content: str):
     pass
 
 
-def send_embed(
+async def delete_message_service(channel_id: int, message_id: int):
+    """
+    Delete a specific message sent by the bot.
+
+    Args:
+        channel_id (int): The ID of the channel containing the message
+        message_id (int): The ID of the message to delete
+
+    Returns:
+        None
+    """
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    if message.author.id == channels_dto.get_bot_id_dto():
+        await message.delete()
+
+
+def send_embed_service(
     channel_id: int, embed_data: dict, reply_to_message_id: Optional[int] = None
 ):
     """
@@ -109,26 +126,13 @@ def send_embed(
     pass
 
 
-def edit_embed(message_id: int, new_embed_data: dict):
+def edit_embed_service(message_id: int, new_embed_data: dict):
     """
     Edit an existing embed message sent by the bot.
 
     Args:
         message_id (int): The ID of the embed message to edit
         new_embed_data (dict): The new data for the embed message
-
-    Returns:
-        None
-    """
-    pass
-
-
-def delete_message(message_id: int):
-    """
-    Delete a specific message sent by the bot.
-
-    Args:
-        message_id (int): The ID of the message to delete
 
     Returns:
         None
