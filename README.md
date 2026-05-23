@@ -246,6 +246,8 @@ Add local vector database for memory across sessions? is that an agent responsib
 
 Three tiers of perms where 1 is like a user, 2 is like a support ish role, and 3 is an admin
 
+List bulk actions that should exist in the memory layer
+
 
 ## Testing Plan
 
