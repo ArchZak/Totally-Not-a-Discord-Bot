@@ -2,8 +2,9 @@ from datetime import datetime
 from typing import Annotated, Optional
 
 import dto.channels_dto as channels_dto
+import dto.users_dtos as users_dto
 from config.exceptions import MessageOwnershipError
-from config.models import Message
+from config.models import Embed, Message
 from discord import Emoji, PartialEmoji, Reaction
 
 # region Message Resources
@@ -117,41 +118,52 @@ async def delete_message_service(channel_id: int, message_id: int):
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
-    if message.author.id == channels_dto.get_bot_id_dto():
+    if message.author.id == users_dto.get_bot_id_dto():
         await message.delete()
     else:
         raise MessageOwnershipError("You can only delete messages sent by the bot.")
 
 
-def send_embed_service(
-    channel_id: int, embed_data: dict, reply_to_message_id: Optional[int] = None
+async def send_embed_service(
+    channel_id: int, embed_data: Embed, reply_to_message_id: Optional[int] = None
 ):
     """
     Send an embed message to a specific channel, optionally as a reply to another message.
 
     Args:
         channel_id (int): The ID of the channel to send the embed message to
-        embed_data (dict): The data for the embed message
+        embed_data (Embed): The embed data for the message
         reply_to_message_id (int, optional): The ID of the message to reply to. Defaults to None
 
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    if reply_to_message_id:
+        message_to_reply_to = await channel.fetch_message(reply_to_message_id)
+        await message_to_reply_to.reply(embed=embed_data.model_dump())
+    else:
+        await channel.send(embed=embed_data.model_dump())
 
 
-def edit_embed_service(message_id: int, new_embed_data: dict):
+async def edit_embed_service(channel_id: int, message_id: int, new_embed_data: Embed):
     """
     Edit an existing embed message sent by the bot.
 
     Args:
+        channel_id (int): The ID of the channel containing the message
         message_id (int): The ID of the embed message to edit
-        new_embed_data (dict): The new data for the embed message
+        new_embed_data (Embed): The new embed data for the message
 
     Returns:
         None
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    if message.author.id == users_dto.get_bot_id_dto():
+        await message.edit(embed=new_embed_data.model_dump())
+    else:
+        raise MessageOwnershipError("You can only edit messages sent by the bot.")
 
 
 async def add_reaction_service(
