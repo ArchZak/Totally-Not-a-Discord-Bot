@@ -70,22 +70,23 @@ def remove_role_from_user(user_id: int, role_id: int):
     """
 
 
-def create_role(name: str, permissions: int):
+async def create_role(name: str, permissions: int):
     """
     Create a new role for the server.
     """
 
 
-def edit_role(role_id: int, name: str = None, permissions: int = None):
+async def edit_role(role_id: int, name: str = None, permissions: int = None):
     """
     Edit a role in the server.
     """
 
 
-def delete_role(role_id: int):
+async def delete_role(role_id: int):
     """
     Delete a new role for the server.
     """
+    await roles_dto.get_role_by_id(role_id).delete()
 
 
 # endregion
