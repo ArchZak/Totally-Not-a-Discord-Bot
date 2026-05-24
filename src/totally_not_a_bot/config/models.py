@@ -15,7 +15,9 @@ class Message(BaseModel):
 class Role(BaseModel):
     name: str
     role_id: int
-    # TODO: add intents and update descriptions
+    hoist: bool
+    position: int
+    mentionable: bool
 
 
 class Channel(BaseModel):

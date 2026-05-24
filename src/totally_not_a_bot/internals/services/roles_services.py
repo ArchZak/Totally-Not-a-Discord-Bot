@@ -1,4 +1,5 @@
 from config.models import Role
+from dto import roles_dto
 
 # region Roles Resources
 
@@ -13,7 +14,7 @@ def get_all_roles() -> list[Role]:
     Returns:
         list[Role]: A list of Role objects representing the roles in the server
     """
-    pass
+    return [Role(name=role.name, role_id=role.id, hoist=role.hoist, position=role.position, mentionable=role.mentionable) for role in roles_dto.get_all_roles_in_guild()]
 
 
 def get_role_by_id(role_id: int) -> Role:
@@ -75,12 +76,6 @@ def delete_role(role_id: int):
     """
     Delete a new role for the server.
     """
-
-
-def bulk_assign_role_to_users(
-    user_ids: list[int], role_id: int
-):  # make bulk versions a decision layer action
-    pass
 
 
 # endregion
