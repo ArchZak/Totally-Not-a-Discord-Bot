@@ -14,7 +14,16 @@ def get_all_roles() -> list[Role]:
     Returns:
         list[Role]: A list of Role objects representing the roles in the server
     """
-    return [Role(name=role.name, role_id=role.id, hoist=role.hoist, position=role.position, mentionable=role.mentionable) for role in roles_dto.get_all_roles_in_guild()]
+    return [
+        Role(
+            name=role.name,
+            role_id=role.id,
+            hoist=role.hoist,
+            position=role.position,
+            mentionable=role.mentionable,
+        )
+        for role in roles_dto.get_all_roles_in_guild()
+    ]
 
 
 def get_role_by_id(role_id: int) -> Role:
