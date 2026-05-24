@@ -27,6 +27,7 @@ def get_role_by_id(role_id: int) -> Role:
     Returns:
         Role: An object representing the role in the server
     """
+    return roles_dto.get_role_by_id(role_id)
 
 
 # endregion
