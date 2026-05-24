@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Annotated, Optional
 
 import dto.channels_dto as channels_dto
@@ -10,7 +10,7 @@ from discord import Emoji, PartialEmoji, Reaction
 # region Message Resources
 
 
-def get_recent_messages_service(
+async def get_recent_messages_service(
     channel_id: int,
     limit: int = 20,
     timestamp: Annotated[Optional[datetime], "Filter messages newer than this"] = None,
@@ -26,14 +26,26 @@ def get_recent_messages_service(
     Returns:
         list[Message]: A list of Message objects representing the recent messages in the channel
     """
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    if timestamp is None:
+        timestamp = datetime.now(datetime.timezone.utc) - timedelta(minutes=30)
+    return [
+        Message(
+            content=msg.content,
+            author_id=msg.author.id,
+            channel_id=msg.channel.id,
+            timestamp=msg.created_at.isoformat(),
+        )
+        async for msg in channel.history(limit=limit, after=timestamp)
+    ]
 
 
 def get_messages_by_filter_service():
+    """Not sure how to implement this yet"""
     pass
 
 
-def get_pinned_messages_service(channel_id: int) -> list[Message]:
+async def get_pinned_messages_service(channel_id: int) -> list[Message]:
     """
     Fetch all the pinned messages in a specific channel.
 
@@ -43,18 +55,40 @@ def get_pinned_messages_service(channel_id: int) -> list[Message]:
     Returns:
         list[Message]: A list of Message objects representing the pinned messages in the channel
     """
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    return [
+        Message(
+            content=msg.content,
+            author_id=msg.author.id,
+            channel_id=msg.channel.id,
+            timestamp=msg.created_at.isoformat(),
+        )
+        async for msg in channel.pins()
+    ]
+
+
+async def get_messages_in_context_window_service(
+    channel_id: int, message_id: int, window_size: int = 5
+) -> list[Message]:
     pass
 
 
-def get_messages_in_context_window_service():
-    pass
+async def get_threads_from_message_service(
+    channel_id: int, message_id: int
+) -> list[Message]:
+    """
+    Fetch all threads that have been started from a specific message.
+
+    Args:
+        channel_id (int): The ID of the channel containing the message
+        message_id (int): The ID of the message to fetch threads from
+
+    Returns:
+        list[Message]: A list of Message objects representing the threads started from the specified message
+    """
 
 
-def get_threads_to_message_service():
-    pass
-
-
-def get_message_states_service():
+async def get_message_states_service():
     pass
 
 
@@ -206,21 +240,6 @@ async def remove_reaction_service(
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
     await message.remove_reaction(emoji)
-
-
-async def delete_messages_service(
-    message_ids: list[int],
-):  # bulk actions should be decision layer prob
-    """
-    Delete multiple messages at once sent by the bot.
-
-    Args:
-        message_ids (list[int]): A list of message IDs to delete
-
-    Returns:
-        None
-    """
-    pass
 
 
 async def pin_message_service(

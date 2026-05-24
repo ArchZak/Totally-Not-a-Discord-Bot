@@ -248,6 +248,8 @@ Three tiers of perms where 1 is like a user, 2 is like a support ish role, and 3
 
 List bulk actions that should exist in the memory layer
 
+Go through docs and do thorough checks of what each type of service is missing, such as attaching files to messages, or adding fields to embeds
+
 
 ## Testing Plan
 
