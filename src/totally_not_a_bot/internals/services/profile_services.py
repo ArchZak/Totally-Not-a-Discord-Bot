@@ -20,7 +20,6 @@ async def set_user_status(status: str):
 
 async def set_user_activity(
     activity_type: Annotated[
-        str,
         Literal["playing", "streaming", "listening", "watching"],
         'The type of activity (e.g., "playing", "streaming", "listening", "watching")',
     ],
@@ -30,7 +29,7 @@ async def set_user_activity(
     Set the activity of the discord bot.
 
     Args:
-        activity_type (str): The type of activity (e.g., "playing", "streaming", "listening", "watching")
+        activity_type (str): The type of activity ("playing", "streaming", "listening", "watching")
         activity_name (str): The name of the activity
 
     Returns:
