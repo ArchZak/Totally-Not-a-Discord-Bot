@@ -3,7 +3,7 @@ from typing import Optional
 import totally_not_a_bot.internals.dto.users_dtos as users_dtos
 from totally_not_a_bot.config.models import Embed, Member
 
-# region User Resources
+# region User Tools
 
 
 async def get_user_info(user_id: int) -> Optional[Member]:
@@ -17,11 +17,6 @@ async def get_user_info(user_id: int) -> Optional[Member]:
         Optional[Member]: A Member object containing the user's information
     """
     return await users_dtos.get_user_info(user_id)
-
-
-# endregion
-
-# region User Tools
 
 
 async def send_direct_message(user_id: int, content: str):

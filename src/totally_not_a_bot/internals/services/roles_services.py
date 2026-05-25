@@ -1,7 +1,7 @@
 import totally_not_a_bot.internals.dto.roles_dtos as roles_dto
 from totally_not_a_bot.config.models import Role
 
-# region Roles Resources
+# region Roles Tools
 
 
 async def get_all_roles() -> list[Role]:
@@ -28,11 +28,6 @@ async def get_role_by_id(role_id: int) -> Role | None:
         Role: An object representing the role in the server
     """
     return await roles_dto.get_role_by_id(role_id)
-
-
-# endregion
-
-# region Roles Tools
 
 
 async def assign_role_to_user(user_id: int, role_id: int):

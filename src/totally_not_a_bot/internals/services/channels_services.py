@@ -3,7 +3,7 @@ from typing import Annotated, Literal, Optional
 import totally_not_a_bot.internals.dto.channels_dto as channels_dto
 from totally_not_a_bot.config.models import Channel
 
-# region Channel Resources
+# region Channel Tools
 
 
 async def get_channel_info(channel_id: int) -> Optional[Channel]:
@@ -34,11 +34,6 @@ async def get_all_channels_info() -> list[Channel]:
 
 async def get_inactive_channels() -> list[Channel]:
     pass
-
-
-# endregion
-
-# region Channel Tools
 
 
 async def create_channel(

@@ -1,7 +1,7 @@
 import totally_not_a_bot.internals.dto.category_dtos as category_dtos
 from totally_not_a_bot.config.models import Channel
 
-# region Category Resources
+# region Category Tools
 
 
 async def get_all_categories_info() -> list[Channel]:
@@ -15,11 +15,6 @@ async def get_all_categories_info() -> list[Channel]:
         list[Channel]: A list of Channel objects representing categories
     """
     return await category_dtos.get_all_categories_info()
-
-
-# endregion
-
-# region Category Tools
 
 
 async def create_category(

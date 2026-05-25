@@ -8,7 +8,7 @@ import totally_not_a_bot.internals.dto.users_dtos as users_dto
 from totally_not_a_bot.config.exceptions import MessageOwnershipError
 from totally_not_a_bot.config.models import Embed, Message
 
-# region Message Resources
+# region Message Tools
 
 
 async def get_recent_messages_service(
@@ -78,10 +78,10 @@ async def get_threads_from_message_service(
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
-    
+
     if not message.thread:
         return []
-        
+
     return [
         Message(
             content=msg.content,
@@ -91,11 +91,6 @@ async def get_threads_from_message_service(
         )
         async for msg in message.thread.history(limit=None)
     ]
-
-
-# endregion
-
-# region Message Tools
 
 
 async def send_message_service(

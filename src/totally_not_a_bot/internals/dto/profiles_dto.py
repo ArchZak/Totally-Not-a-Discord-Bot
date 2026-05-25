@@ -1,7 +1,5 @@
 from server import _client
 
-# region Profile Tools
-
 
 async def set_user_status_dto(status: str):
     """
@@ -29,6 +27,3 @@ async def set_user_activity_dto(activity_type: str, activity_name: str):
     """
     activity = _client.Activity(type=activity_type, name=activity_name)
     await _client.change_presence(activity=activity)
-
-
-# endregion
