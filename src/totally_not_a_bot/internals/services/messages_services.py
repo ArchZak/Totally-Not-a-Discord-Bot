@@ -76,10 +76,21 @@ async def get_threads_from_message_service(
     Returns:
         list[Message]: A list of Message objects representing the threads started from the specified message
     """
-
-
-async def get_message_states_service():
-    pass
+    channel = channels_dto.fetch_channel_by_id(channel_id)
+    message = await channel.fetch_message(message_id)
+    
+    if not message.thread:
+        return []
+        
+    return [
+        Message(
+            content=msg.content,
+            author_id=msg.author.id,
+            channel_id=msg.channel.id,
+            timestamp=msg.created_at,
+        )
+        async for msg in message.thread.history(limit=None)
+    ]
 
 
 # endregion
