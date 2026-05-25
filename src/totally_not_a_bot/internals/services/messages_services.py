@@ -41,11 +41,6 @@ async def get_recent_messages_service(
     ]
 
 
-def get_messages_by_filter_service():
-    """Not sure how to implement this yet"""
-    pass
-
-
 async def get_pinned_messages_service(channel_id: int) -> list[Message]:
     """
     Fetch all the pinned messages in a specific channel.
@@ -66,12 +61,6 @@ async def get_pinned_messages_service(channel_id: int) -> list[Message]:
         )
         async for msg in channel.pins()
     ]
-
-
-async def get_messages_in_context_window_service(
-    channel_id: int, message_id: int, window_size: int = 5
-) -> list[Message]:
-    pass
 
 
 async def get_threads_from_message_service(
