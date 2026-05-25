@@ -250,6 +250,8 @@ List bulk actions that should exist in the memory layer
 
 Go through docs and do thorough checks of what each type of service is missing, such as attaching files to messages, or adding fields to embeds
 
+Have to do conversion between discord type to pydantic for AI and code to handle
+
 
 ## Testing Plan
 
