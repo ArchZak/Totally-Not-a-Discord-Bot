@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
 from typing import Annotated, Optional
 
-import dto.channels_dto as channels_dto
-import dto.users_dtos as users_dto
-from config.exceptions import MessageOwnershipError
-from config.models import Embed, Message
 from discord import Emoji, PartialEmoji, Reaction
+
+import totally_not_a_bot.internals.dto.channels_dto as channels_dto
+import totally_not_a_bot.internals.dto.users_dtos as users_dto
+from totally_not_a_bot.config.exceptions import MessageOwnershipError
+from totally_not_a_bot.config.models import Embed, Message
 
 # region Message Resources
 
@@ -34,7 +35,7 @@ async def get_recent_messages_service(
             content=msg.content,
             author_id=msg.author.id,
             channel_id=msg.channel.id,
-            timestamp=msg.created_at.isoformat(),
+            timestamp=msg.created_at,
         )
         async for msg in channel.history(limit=limit, after=timestamp)
     ]
@@ -61,7 +62,7 @@ async def get_pinned_messages_service(channel_id: int) -> list[Message]:
             content=msg.content,
             author_id=msg.author.id,
             channel_id=msg.channel.id,
-            timestamp=msg.created_at.isoformat(),
+            timestamp=msg.created_at,
         )
         async for msg in channel.pins()
     ]

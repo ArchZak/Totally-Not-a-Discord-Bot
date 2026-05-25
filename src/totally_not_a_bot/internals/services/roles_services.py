@@ -1,10 +1,10 @@
-from config.models import Role
-from dto import roles_dto
+import totally_not_a_bot.internals.dto.roles_dtos as roles_dto
+from totally_not_a_bot.config.models import Role
 
 # region Roles Resources
 
 
-def get_all_roles() -> list[Role]:
+async def get_all_roles() -> list[Role]:
     """
     Get all roles and other associated information about the roles in the server.
 
@@ -14,19 +14,10 @@ def get_all_roles() -> list[Role]:
     Returns:
         list[Role]: A list of Role objects representing the roles in the server
     """
-    return [
-        Role(
-            name=role.name,
-            role_id=role.id,
-            hoist=role.hoist,
-            position=role.position,
-            mentionable=role.mentionable,
-        )
-        for role in roles_dto.get_all_roles_in_guild()
-    ]
+    return await roles_dto.get_all_roles_in_guild()
 
 
-def get_role_by_id(role_id: int) -> Role:
+async def get_role_by_id(role_id: int) -> Role | None:
     """
     Get the information about a role after passing in its id.
 
@@ -36,7 +27,7 @@ def get_role_by_id(role_id: int) -> Role:
     Returns:
         Role: An object representing the role in the server
     """
-    return roles_dto.get_role_by_id(role_id)
+    return await roles_dto.get_role_by_id(role_id)
 
 
 # endregion
@@ -74,17 +65,25 @@ async def create_role(name: str, permissions: int):
     """
     Create a new role for the server.
     """
+    pass
 
 
 async def edit_role(role_id: int, name: str = None, permissions: int = None):
     """
     Edit a role in the server.
     """
+    pass
 
 
 async def delete_role(role_id: int):
     """
     Delete a new role for the server.
+
+    Args:
+        role_id (int): The ID of the role to delete
+
+    Returns:
+        None
     """
     await roles_dto.get_role_by_id(role_id).delete()
 

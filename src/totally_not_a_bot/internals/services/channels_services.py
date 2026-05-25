@@ -1,6 +1,6 @@
 from typing import Optional
 
-from config.models import Channel
+from totally_not_a_bot.config.models import Channel
 
 # region Channel Resources
 
