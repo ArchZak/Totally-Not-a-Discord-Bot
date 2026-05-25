@@ -28,3 +28,81 @@ async def get_role_by_id(role_id: int) -> Role | None:
         return None
     role = _client.guilds[0].get_role(role_id)
     return _convert_role(role) if role else None
+
+
+async def create_role(
+    name: str, permissions: int | None = None, color: int | None = None
+) -> Role | None:
+    """Create a new role in the server."""
+    if not _client.guilds:
+        return None
+    guild = _client.guilds[0]
+
+    kwargs = {"name": name}
+    if permissions is not None:
+        kwargs["permissions"] = discord.Permissions(permissions)
+    if color is not None:
+        kwargs["color"] = discord.Color(color)
+
+    role = await guild.create_role(**kwargs)
+    return _convert_role(role)
+
+
+async def edit_role(
+    role_id: int,
+    name: str | None = None,
+    permissions: int | None = None,
+    color: int | None = None,
+):
+    """Edit a role in the server."""
+    if not _client.guilds:
+        return
+    guild = _client.guilds[0]
+    role = guild.get_role(role_id)
+    if not role:
+        return
+
+    kwargs = {}
+    if name is not None:
+        kwargs["name"] = name
+    if permissions is not None:
+        kwargs["permissions"] = discord.Permissions(permissions)
+    if color is not None:
+        kwargs["color"] = discord.Color(color)
+
+    if kwargs:
+        await role.edit(**kwargs)
+
+
+async def delete_role(role_id: int):
+    """Delete a role from the server."""
+    if not _client.guilds:
+        return
+    guild = _client.guilds[0]
+    role = guild.get_role(role_id)
+    if role:
+        await role.delete()
+
+
+async def assign_role_to_user(user_id: int, role_id: int):
+    """Assign a role to a user."""
+    if not _client.guilds:
+        return
+    guild = _client.guilds[0]
+    member = guild.get_member(user_id)
+    role = guild.get_role(role_id)
+
+    if member and role:
+        await member.add_roles(role)
+
+
+async def remove_role_from_user(user_id: int, role_id: int):
+    """Remove a role from a user."""
+    if not _client.guilds:
+        return
+    guild = _client.guilds[0]
+    member = guild.get_member(user_id)
+    role = guild.get_role(role_id)
+
+    if member and role:
+        await member.remove_roles(role)

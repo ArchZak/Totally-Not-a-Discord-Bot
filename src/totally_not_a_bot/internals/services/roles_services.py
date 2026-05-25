@@ -35,7 +35,7 @@ async def get_role_by_id(role_id: int) -> Role | None:
 # region Roles Tools
 
 
-def assign_role_to_user(user_id: int, role_id: int):
+async def assign_role_to_user(user_id: int, role_id: int):
     """
     Assign a role to a user.
 
@@ -46,11 +46,12 @@ def assign_role_to_user(user_id: int, role_id: int):
     Returns:
         None
     """
+    await roles_dto.assign_role_to_user(user_id, role_id)
 
 
-def remove_role_from_user(user_id: int, role_id: int):
+async def remove_role_from_user(user_id: int, role_id: int):
     """
-    Remove a role to a user.
+    Remove a role from a user.
 
     Args:
         user_id (int): The ID of the user to Remove the role to
@@ -59,20 +60,28 @@ def remove_role_from_user(user_id: int, role_id: int):
     Returns:
         None
     """
+    await roles_dto.remove_role_from_user(user_id, role_id)
 
 
-async def create_role(name: str, permissions: int):
+async def create_role(
+    name: str, permissions: int | None = None, color: int | None = None
+):
     """
     Create a new role for the server.
     """
-    pass
+    return await roles_dto.create_role(name, permissions, color)
 
 
-async def edit_role(role_id: int, name: str = None, permissions: int = None):
+async def edit_role(
+    role_id: int,
+    name: str | None = None,
+    permissions: int | None = None,
+    color: int | None = None,
+):
     """
     Edit a role in the server.
     """
-    pass
+    await roles_dto.edit_role(role_id, name, permissions, color)
 
 
 async def delete_role(role_id: int):
@@ -85,7 +94,7 @@ async def delete_role(role_id: int):
     Returns:
         None
     """
-    await roles_dto.get_role_by_id(role_id).delete()
+    await roles_dto.delete_role(role_id)
 
 
 # endregion
