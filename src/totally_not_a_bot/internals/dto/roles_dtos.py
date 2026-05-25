@@ -1,34 +1,30 @@
-from server import _client
+import discord
 
 from totally_not_a_bot.config.models import Role
-
-# region Roles Tools
-
-
-async def get_all_roles_in_guild():
-    """
-    Get all roles and other associated information about the roles in the server.
-
-    Args:
-        None
-
-    Returns:
-        list[Role]: A list of Role objects representing the roles in the server
-    """
-    return _client.guilds[0].roles
+from totally_not_a_bot.server import _client
 
 
-async def get_role_by_id(role_id: int) -> Role:
-    """
-    Get the information about a role after passing in its id.
-
-    Args:
-        role_id (int): The ID of the role to fetch information from
-
-    Returns:
-        Role: An object representing the role in the server
-    """
-    return _client.guilds[0].get_role(role_id)
+def _convert_role(role: discord.Role) -> Role:
+    return Role(
+        name=role.name,
+        role_id=role.id,
+        hoist=role.hoist,
+        position=role.position,
+        mentionable=role.mentionable,
+        color=role.color.value if role.color else None,
+    )
 
 
-# endregion
+async def get_all_roles_in_guild() -> list[Role]:
+    """Get all roles in the server as Pydantic models."""
+    if not _client.guilds:
+        return []
+    return [_convert_role(r) for r in _client.guilds[0].roles]
+
+
+async def get_role_by_id(role_id: int) -> Role | None:
+    """Get a role by ID as a Pydantic model."""
+    if not _client.guilds:
+        return None
+    role = _client.guilds[0].get_role(role_id)
+    return _convert_role(role) if role else None

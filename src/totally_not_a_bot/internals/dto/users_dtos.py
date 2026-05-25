@@ -1,11 +1,6 @@
-from server import _client
+from totally_not_a_bot.server import _client
 
 
 def get_bot_id_dto():
-    """
-    Get the bot's user ID.
-
-    Returns:
-        int: The bot's user ID
-    """
+    """Get the bot's user ID."""
     return _client.user.id
