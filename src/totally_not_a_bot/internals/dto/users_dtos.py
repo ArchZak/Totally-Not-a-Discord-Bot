@@ -2,7 +2,7 @@ from typing import Optional
 
 import discord
 
-from totally_not_a_bot.config.models import Member
+from totally_not_a_bot.config.models import Embed, Member
 from totally_not_a_bot.server import _client
 
 
@@ -11,7 +11,7 @@ def _convert_member(member: discord.Member) -> Member:
         user_id=member.id,
         nickname=member.nick,
         roles=[role.id for role in member.roles],
-        date_joined=member.joined_at
+        date_joined=member.joined_at,
     )
 
 
@@ -41,7 +41,8 @@ async def send_direct_message(user_id: int, content: str):
     if member:
         await member.send(content)
 
-async def send_direct_message_with_embed(user_id: int, content: str, embed: discord.Embed):
+
+async def send_direct_message_with_embed(user_id: int, content: str, embed: Embed):
     """Send a direct message with an embed to a user."""
     member = fetch_user_by_id(user_id)
     if member:
