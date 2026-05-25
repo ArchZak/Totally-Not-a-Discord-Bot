@@ -43,3 +43,4 @@ class Member(BaseModel):
     user_id: int
     nickname: Optional[str] = None
     roles: list[int]
+    date_joined: Optional[datetime] = None
