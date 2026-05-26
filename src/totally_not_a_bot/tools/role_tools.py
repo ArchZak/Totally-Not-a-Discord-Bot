@@ -1,4 +1,5 @@
 from totally_not_a_bot.config.models import Role
+from totally_not_a_bot.internals.services import roles_services
 from totally_not_a_bot.server import mcp
 
 
@@ -13,6 +14,7 @@ async def get_all_roles() -> list[Role]:
     Returns:
         list[Role]: A list of Role objects representing the roles in the server
     """
+    return await roles_services.get_all_roles_service()
 
 
 @mcp.tool("get_role_by_id")
@@ -26,6 +28,7 @@ async def get_role_by_id(role_id: int) -> Role | None:
     Returns:
         Role: An object representing the role in the server
     """
+    return await roles_services.get_role_by_id_service(role_id)
 
 
 @mcp.tool("assign_role_to_user")
@@ -40,6 +43,7 @@ async def assign_role_to_user(user_id: int, role_id: int):
     Returns:
         None
     """
+    return await roles_services.assign_role_to_user_service(user_id, role_id)
 
 
 @mcp.tool("remove_role_from_user")
@@ -54,6 +58,7 @@ async def remove_role_from_user(user_id: int, role_id: int):
     Returns:
         None
     """
+    return await roles_services.remove_role_from_user_service(user_id, role_id)
 
 
 @mcp.tool("create_role")
@@ -71,6 +76,7 @@ async def create_role(
     Returns:
         None
     """
+    return await roles_services.create_role_service(name, permissions, color)
 
 
 @mcp.tool("edit_role")
@@ -92,6 +98,7 @@ async def edit_role(
     Returns:
         None
     """
+    return await roles_services.edit_role_service(role_id, name, permissions, color)
 
 
 @mcp.tool("delete_role")
@@ -105,3 +112,4 @@ async def delete_role(role_id: int):
     Returns:
         None
     """
+    return await roles_services.delete_role_service(role_id)

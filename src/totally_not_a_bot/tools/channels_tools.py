@@ -1,6 +1,7 @@
 from typing import Optional
 
 from totally_not_a_bot.config.models import Channel
+from totally_not_a_bot.internals.services import channels_services
 from totally_not_a_bot.server import mcp
 
 
@@ -15,6 +16,7 @@ async def get_channel_info(channel_id: int) -> Optional[Channel]:
     Returns:
         Optional[Channel]: A Channel object containing the channel's information, such as its name, description, and other relevant details
     """
+    return await channels_services.get_channel_info_service(channel_id)
 
 
 @mcp.tool("get_all_channels_info")
@@ -28,6 +30,7 @@ async def get_all_channels_info() -> list[Channel]:
     Returns:
         list[Channel]: A list of Channel objects, each containing information about a channel in the server
     """
+    return await channels_services.get_all_channels_info_service()
 
 
 @mcp.tool("create_channel")
@@ -51,6 +54,9 @@ async def create_channel(
     Returns:
         None
     """
+    return await channels_services.create_channel_service(
+        name, channel_type, parent_id, is_private, allowed_role_ids
+    )
 
 
 @mcp.tool("edit_channel")
@@ -74,6 +80,9 @@ async def edit_channel(
     Returns:
         None
     """
+    return await channels_services.edit_channel_service(
+        channel_id, new_name, new_parent_id, is_private, allowed_role_ids
+    )
 
 
 @mcp.tool("delete_channel")
@@ -87,6 +96,7 @@ async def delete_channel(channel_id: int):
     Returns:
         None
     """
+    return await channels_services.delete_channel_service(channel_id)
 
 
 @mcp.tool("move_channel")
@@ -101,6 +111,7 @@ async def move_channel(channel_id: int, new_parent_id: int):
     Returns:
         None
     """
+    return await channels_services.move_channel_service(channel_id, new_parent_id)
 
 
 @mcp.tool("set_channel_position")
@@ -115,3 +126,4 @@ async def set_channel_position(channel_id: int, position: int):
     Returns:
         None
     """
+    return await channels_services.set_channel_position_service(channel_id, position)

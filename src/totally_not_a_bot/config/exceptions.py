@@ -49,4 +49,5 @@ class GuildNotFoundError(Exception):
 class MemberNotFoundError(Exception):
     """Raised when a user with the specified ID is not found."""
 
+
 # endregion

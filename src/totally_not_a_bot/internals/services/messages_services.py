@@ -63,7 +63,7 @@ async def get_pinned_messages_service(channel_id: int) -> list[Message]:
     ]
 
 
-async def get_threads_from_message_service(
+async def get_thread_from_message_service(
     channel_id: int, message_id: int
 ) -> list[Message]:
     """

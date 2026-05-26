@@ -1,5 +1,6 @@
 from typing import Annotated, Literal
 
+from totally_not_a_bot.internals.services import profile_services
 from totally_not_a_bot.server import mcp
 
 
@@ -14,10 +15,11 @@ async def set_bot_status(status: str):
     Returns:
         None
     """
+    await profile_services.set_bot_status_service(status)
 
 
 @mcp.tool("set_bot_activity", "Set the activity of the discord bot")
-async def set_user_activity(
+async def set_bot_activity(
     activity_type: Annotated[
         Literal["playing", "streaming", "listening", "watching"],
         'The type of activity (e.g., "playing", "streaming", "listening", "watching")',
@@ -34,3 +36,4 @@ async def set_user_activity(
     Returns:
         None
     """
+    return await profile_services.set_bot_activity_service(activity_type, activity_name)

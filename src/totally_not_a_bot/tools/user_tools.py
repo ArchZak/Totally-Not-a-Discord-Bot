@@ -1,4 +1,5 @@
 from totally_not_a_bot.config.models import Embed
+from totally_not_a_bot.internals.services import users_services
 from totally_not_a_bot.server import mcp
 
 
@@ -16,6 +17,7 @@ async def get_user_info(user_id: int):
     Returns:
         Optional[Member]: A Member object containing the user's information
     """
+    return await users_services.get_user_info_service(user_id)
 
 
 @mcp.tool("send_direct_message", "Send a direct message to a user.")
@@ -30,6 +32,7 @@ async def send_direct_message(user_id: int, content: str):
     Returns:
         None
     """
+    return await users_services.send_direct_message_service(user_id, content)
 
 
 @mcp.tool(
@@ -47,3 +50,6 @@ async def send_direct_message_with_embed(user_id: int, content: str, embed: Embe
     Returns:
         None
     """
+    return await users_services.send_direct_message_with_embed_service(
+        user_id, content, embed
+    )

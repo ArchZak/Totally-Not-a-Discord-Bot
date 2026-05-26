@@ -3,6 +3,7 @@ from typing import Annotated
 from discord import Emoji, PartialEmoji, Reaction
 
 from totally_not_a_bot.config.models import Embed, Message
+from totally_not_a_bot.internals.services import messages_services
 from totally_not_a_bot.server import mcp
 
 
@@ -21,6 +22,9 @@ async def get_recent_messages(
     Returns:
         list[Message]: A list of Message objects representing the recent messages in the channel
     """
+    return await messages_services.get_recent_messages_service(
+        channel_id, limit, timestamp
+    )
 
 
 @mcp.tool("get_pinned_messages")
@@ -34,6 +38,7 @@ async def get_pinned_messages(channel_id: int) -> list[Message]:
     Returns:
         list[Message]: A list of Message objects representing the pinned messages in the channel
     """
+    return await messages_services.get_pinned_messages_service(channel_id)
 
 
 @mcp.tool("get_thread_from_message")
@@ -48,6 +53,9 @@ async def get_thread_from_message(channel_id: int, message_id: int) -> list[Mess
     Returns:
         list[Message]: A list of Message objects representing the threads started from the specified message
     """
+    return await messages_services.get_thread_from_message_service(
+        channel_id, message_id
+    )
 
 
 @mcp.tool("send_message")
@@ -60,6 +68,9 @@ async def send_message(channel_id: int, content: str, reply_to_message_id: int =
         content (str): The content of the message to be sent
         reply_to_message_id (int, optional): The ID of the message to reply to. Defaults to None
     """
+    return await messages_services.send_message_service(
+        channel_id, content, reply_to_message_id
+    )
 
 
 @mcp.tool("edit_message")
@@ -72,6 +83,9 @@ async def edit_message(channel_id: int, message_id: int, new_content: str):
         message_id (int): The ID of the message to be edited
         new_content (str): The new content to replace the existing message content
     """
+    return await messages_services.edit_message_service(
+        channel_id, message_id, new_content
+    )
 
 
 @mcp.tool("delete_message")
@@ -83,6 +97,7 @@ async def delete_message(channel_id: int, message_id: int):
         channel_id (int): The ID of the channel where the message is located
         message_id (int): The ID of the message to be deleted
     """
+    return await messages_services.delete_message_service(channel_id, message_id)
 
 
 @mcp.tool("send_embed")
@@ -95,6 +110,9 @@ async def send_embed(channel_id: int, embed: Embed, reply_to_message_id: int = N
         embed (Embed): The Embed object containing the embed message details
         reply_to_message_id (int, optional): The ID of the message to reply to. Defaults to None
     """
+    return await messages_services.send_embed_service(
+        channel_id, embed, reply_to_message_id
+    )
 
 
 @mcp.tool("edit_embed")
@@ -107,6 +125,7 @@ async def edit_embed(channel_id: int, message_id: int, new_embed: Embed):
         message_id (int): The ID of the embed message to be edited
         new_embed (Embed): The new Embed object containing the updated embed message details
     """
+    return await messages_services.edit_embed_service(channel_id, message_id, new_embed)
 
 
 @mcp.tool("pin_message")
@@ -118,6 +137,7 @@ async def pin_message(channel_id: int, message_id: int):
         channel_id (int): The ID of the channel where the message is located
         message_id (int): The ID of the message to be pinned
     """
+    return await messages_services.pin_message_service(channel_id, message_id)
 
 
 @mcp.tool("unpin_message")
@@ -129,6 +149,7 @@ async def unpin_message(channel_id: int, message_id: int):
         channel_id (int): The ID of the channel where the message is located
         message_id (int): The ID of the message to be unpinned
     """
+    return await messages_services.unpin_message_service(channel_id, message_id)
 
 
 @mcp.tool("add_reaction")
@@ -145,6 +166,7 @@ async def add_reaction(
         message_id (int): The ID of the message to add a reaction to
         emoji (str): The emoji to be added as a reaction
     """
+    return await messages_services.add_reaction_service(channel_id, message_id, emoji)
 
 
 @mcp.tool("remove_reaction")
@@ -161,3 +183,6 @@ async def remove_reaction(
         message_id (int): The ID of the message to remove a reaction from
         emoji (str): The emoji to be removed from the reactions
     """
+    return await messages_services.remove_reaction_service(
+        channel_id, message_id, emoji
+    )
