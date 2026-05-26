@@ -19,11 +19,11 @@ format = { cmd = [
     ".ruff.toml",
     "./"
 ]}
-server = { cmd = [
+dev = { cmd = [
     "python",
     "src/totally_not_a_bot/server.py"
 ] }
-test = { cmd = [
+testscript = { cmd = [
     "python",
     "scripts/tests.py"
 ]}

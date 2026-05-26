@@ -6,4 +6,6 @@ This project was a great way for me to become familiar with how developing MCPs 
 
 README will be finished once the project reaches a solid enough state, and could be reasonably used. Still need to implement the enforcement tools, create memory layers to combine tool calls / make bulk actions, test suite needs to be made using pytest and pytest-asyncio, and put in more CI workflows. 
 
-README needs 
+Future README will feature highlights + an overview of the project(what it is, why I made it), getting started with dev (spinning up the server for local dev, command lines, env things) and other stuff as I think of them. 
+
+Should probably also make a docker container for all this. 
