@@ -1,5 +1,9 @@
 import discord
 
+from totally_not_a_bot.config.exceptions import (
+    CategoryNotFoundError,
+    GuildNotFoundError,
+)
 from totally_not_a_bot.config.models import Category
 from totally_not_a_bot.server import _client
 
@@ -23,7 +27,7 @@ def fetch_category_by_id(category_id: int):
 async def get_all_categories_info() -> list[Category]:
     """Get information about all categories in the server."""
     if not _client.guilds:
-        return []
+        raise GuildNotFoundError("Guild with the specified ID not found.")
     return [_convert_category(c) for c in _client.guilds[0].categories]
 
 
@@ -32,7 +36,7 @@ async def create_category(
 ):
     """Create a new category in the server with the specified name."""
     if not _client.guilds:
-        return
+        raise GuildNotFoundError("Guild with the specified ID not found.")
     guild = _client.guilds[0]
 
     overwrites = {}
@@ -59,7 +63,7 @@ async def edit_category(
     """Edit the name or permissions of a category in the server."""
     category = fetch_category_by_id(category_id)
     if not category:
-        return
+        raise CategoryNotFoundError("Category with the specified ID not found.")
 
     kwargs = {}
     if new_name is not None:
@@ -96,6 +100,8 @@ async def delete_category(category_id: int):
     category = fetch_category_by_id(category_id)
     if category:
         await category.delete()
+    else:
+        raise CategoryNotFoundError("Category with the specified ID not found.")
 
 
 async def move_category(category_id: int, new_position: int):
@@ -103,3 +109,5 @@ async def move_category(category_id: int, new_position: int):
     category = fetch_category_by_id(category_id)
     if category:
         await category.edit(position=new_position)
+    else:
+        raise CategoryNotFoundError("Category with the specified ID not found.")

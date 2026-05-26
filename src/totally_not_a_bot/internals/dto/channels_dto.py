@@ -2,6 +2,11 @@ from typing import Optional
 
 import discord
 
+from totally_not_a_bot.config.exceptions import (
+    CategoryNotFoundError,
+    ChannelNotFoundError,
+    GuildNotFoundError,
+)
 from totally_not_a_bot.config.models import Channel
 from totally_not_a_bot.server import _client
 
@@ -24,14 +29,14 @@ async def get_channel_info(channel_id: int) -> Channel | None:
     """Get information about a specific channel in the server."""
     channel = fetch_channel_by_id(channel_id)
     if not channel:
-        return None
+        raise ChannelNotFoundError("Channel with the specified ID not found.")
     return _convert_channel(channel)
 
 
 async def get_all_channels_info() -> list[Channel]:
     """Get information about all channels in the server."""
     if not _client.guilds:
-        return []
+        raise GuildNotFoundError("Guild with the specified ID not found.")
     return [_convert_channel(c) for c in _client.guilds[0].channels]
 
 
@@ -44,7 +49,7 @@ async def create_channel(
 ):
     """Create a new channel in the server with the specified name, type, and optional parent category."""
     if not _client.guilds:
-        return
+        raise GuildNotFoundError("Guild with the specified ID not found.")
     guild = _client.guilds[0]
     category = guild.get_channel(parent_id) if parent_id else None
 
@@ -83,7 +88,7 @@ async def edit_channel(
     """Edit the name, parent category, or permissions of a channel in the server."""
     channel = fetch_channel_by_id(channel_id)
     if not channel:
-        return
+        raise ChannelNotFoundError("Channel with the specified ID not found.")
 
     kwargs = {}
     if new_name is not None:
@@ -125,16 +130,21 @@ async def delete_channel(channel_id: int):
     channel = fetch_channel_by_id(channel_id)
     if channel:
         await channel.delete()
+    else:
+        raise ChannelNotFoundError("Channel with the specified ID not found.")
 
 
 async def move_channel(channel_id: int, new_parent_id: int):
     """Move a channel to a different parent category."""
     channel = fetch_channel_by_id(channel_id)
     if not channel:
-        return
+        raise ChannelNotFoundError("Channel with the specified ID not found.")
+
     category = _client.get_channel(new_parent_id)
     if category:
         await channel.edit(category=category)
+    else:
+        raise CategoryNotFoundError("Category with the specified ID not found.")
 
 
 async def set_channel_position(channel_id: int, position: int):
@@ -142,3 +152,5 @@ async def set_channel_position(channel_id: int, position: int):
     channel = fetch_channel_by_id(channel_id)
     if channel:
         await channel.edit(position=position)
+    else:
+        raise ChannelNotFoundError("Channel with the specified ID not found.")

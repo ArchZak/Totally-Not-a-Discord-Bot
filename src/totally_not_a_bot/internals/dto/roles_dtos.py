@@ -1,5 +1,10 @@
 import discord
 
+from totally_not_a_bot.config.exceptions import (
+    GuildNotFoundError,
+    MemberNotFoundError,
+    RoleNotFoundError,
+)
 from totally_not_a_bot.config.models import Role
 from totally_not_a_bot.server import _client
 
@@ -18,16 +23,18 @@ def _convert_role(role: discord.Role) -> Role:
 async def get_all_roles_in_guild() -> list[Role]:
     """Get all roles in the server as Pydantic models."""
     if not _client.guilds:
-        return []
+        raise GuildNotFoundError("No guilds found for the bot.")
     return [_convert_role(r) for r in _client.guilds[0].roles]
 
 
 async def get_role_by_id(role_id: int) -> Role | None:
     """Get a role by ID as a Pydantic model."""
     if not _client.guilds:
-        return None
+        raise GuildNotFoundError("No guilds found for the bot.")
     role = _client.guilds[0].get_role(role_id)
-    return _convert_role(role) if role else None
+    if not role:
+        raise RoleNotFoundError("Role with the specified ID not found.")
+    return _convert_role(role)
 
 
 async def create_role(
@@ -35,7 +42,7 @@ async def create_role(
 ) -> Role | None:
     """Create a new role in the server."""
     if not _client.guilds:
-        return None
+        raise GuildNotFoundError("No guilds found for the bot.")
     guild = _client.guilds[0]
 
     kwargs = {"name": name}
@@ -56,11 +63,11 @@ async def edit_role(
 ):
     """Edit a role in the server."""
     if not _client.guilds:
-        return
+        raise GuildNotFoundError("No guilds found for the bot.")
     guild = _client.guilds[0]
     role = guild.get_role(role_id)
     if not role:
-        return
+        raise RoleNotFoundError("Role with the specified ID not found.")
 
     kwargs = {}
     if name is not None:
@@ -77,32 +84,44 @@ async def edit_role(
 async def delete_role(role_id: int):
     """Delete a role from the server."""
     if not _client.guilds:
-        return
+        raise GuildNotFoundError("No guilds found for the bot.")
     guild = _client.guilds[0]
     role = guild.get_role(role_id)
     if role:
         await role.delete()
+    else:
+        raise RoleNotFoundError("Role with the specified ID not found.")
 
 
 async def assign_role_to_user(user_id: int, role_id: int):
     """Assign a role to a user."""
     if not _client.guilds:
-        return
+        raise GuildNotFoundError("No guilds found for the bot.")
     guild = _client.guilds[0]
     member = guild.get_member(user_id)
     role = guild.get_role(role_id)
 
     if member and role:
         await member.add_roles(role)
+    else:
+        if not member:
+            raise MemberNotFoundError("User with the specified ID not found.")
+        if not role:
+            raise RoleNotFoundError("Role with the specified ID not found.")
 
 
 async def remove_role_from_user(user_id: int, role_id: int):
     """Remove a role from a user."""
     if not _client.guilds:
-        return
+        raise GuildNotFoundError("No guilds found for the bot.")
     guild = _client.guilds[0]
     member = guild.get_member(user_id)
     role = guild.get_role(role_id)
 
     if member and role:
         await member.remove_roles(role)
+    else:
+        if not member:
+            raise MemberNotFoundError("User with the specified ID not found.")
+        if not role:
+            raise RoleNotFoundError("Role with the specified ID not found.")
