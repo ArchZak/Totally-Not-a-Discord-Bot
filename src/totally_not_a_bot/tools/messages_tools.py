@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from totally_not_a_bot.config.models import Embed, Message
 from totally_not_a_bot.internals.services import messages_services
 
