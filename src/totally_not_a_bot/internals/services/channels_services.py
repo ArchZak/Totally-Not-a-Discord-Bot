@@ -6,7 +6,7 @@ from totally_not_a_bot.config.models import Channel
 # region Channel Tools
 
 
-async def get_channel_info(channel_id: int) -> Optional[Channel]:
+async def get_channel_info_service(channel_id: int) -> Optional[Channel]:
     """
     Get the description, name, and other associated information about a channel in the server.
 
@@ -19,7 +19,7 @@ async def get_channel_info(channel_id: int) -> Optional[Channel]:
     return await channels_dto.get_channel_info(channel_id)
 
 
-async def get_all_channels_info() -> list[Channel]:
+async def get_all_channels_info_service() -> list[Channel]:
     """
     Get information about all channels in the server.
 
@@ -32,11 +32,7 @@ async def get_all_channels_info() -> list[Channel]:
     return await channels_dto.get_all_channels_info()
 
 
-async def get_inactive_channels() -> list[Channel]:
-    pass
-
-
-async def create_channel(
+async def create_channel_service(
     name: str,
     channel_type: Annotated[
         Literal["text", "voice", "forum"],
@@ -64,7 +60,7 @@ async def create_channel(
     )
 
 
-async def edit_channel(
+async def edit_channel_service(
     channel_id: int,
     new_name: Optional[str] = None,
     new_parent_id: Optional[int] = None,
@@ -89,7 +85,7 @@ async def edit_channel(
     )
 
 
-async def delete_channel(channel_id: int):
+async def delete_channel_service(channel_id: int):
     """
     Delete an existing channel from the server.
 
@@ -102,7 +98,7 @@ async def delete_channel(channel_id: int):
     await channels_dto.delete_channel(channel_id)
 
 
-async def move_channel(channel_id: int, new_parent_id: int):
+async def move_channel_service(channel_id: int, new_parent_id: int):
     """
     Move an existing channel to a different parent category.
 
@@ -116,7 +112,7 @@ async def move_channel(channel_id: int, new_parent_id: int):
     await channels_dto.move_channel(channel_id, new_parent_id)
 
 
-async def set_channel_position(channel_id: int, position: int):
+async def set_channel_position_service(channel_id: int, position: int):
     """
     Change the position/order of a channel within its category.
 

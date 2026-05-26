@@ -1,15 +1,17 @@
 import discord
 
-from totally_not_a_bot.config.models import Channel
+from totally_not_a_bot.config.models import Category
 from totally_not_a_bot.server import _client
 
 
-def _convert_category(category: discord.CategoryChannel) -> Channel:
-    return Channel(
+def _convert_category(category: discord.CategoryChannel) -> Category:
+    return Category(
         name=category.name,
-        channel_id=category.id,
-        channel_description=None,
-        channel_type="category",
+        category_id=category.id,
+        is_private=category.is_private(),
+        allowed_role_ids=[
+            role.id for role in category.overwrites if isinstance(role, discord.Role)
+        ],
     )
 
 
@@ -18,7 +20,7 @@ def fetch_category_by_id(category_id: int):
     return _client.get_channel(category_id)
 
 
-async def get_all_categories_info() -> list[Channel]:
+async def get_all_categories_info() -> list[Category]:
     """Get information about all categories in the server."""
     if not _client.guilds:
         return []

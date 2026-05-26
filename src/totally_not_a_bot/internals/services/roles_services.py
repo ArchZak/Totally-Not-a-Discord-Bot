@@ -4,7 +4,7 @@ from totally_not_a_bot.config.models import Role
 # region Roles Tools
 
 
-async def get_all_roles() -> list[Role]:
+async def get_all_roles_service() -> list[Role]:
     """
     Get all roles and other associated information about the roles in the server.
 
@@ -17,7 +17,7 @@ async def get_all_roles() -> list[Role]:
     return await roles_dto.get_all_roles_in_guild()
 
 
-async def get_role_by_id(role_id: int) -> Role | None:
+async def get_role_by_id_service(role_id: int) -> Role | None:
     """
     Get the information about a role after passing in its id.
 
@@ -30,7 +30,7 @@ async def get_role_by_id(role_id: int) -> Role | None:
     return await roles_dto.get_role_by_id(role_id)
 
 
-async def assign_role_to_user(user_id: int, role_id: int):
+async def assign_role_to_user_service(user_id: int, role_id: int):
     """
     Assign a role to a user.
 
@@ -44,7 +44,7 @@ async def assign_role_to_user(user_id: int, role_id: int):
     await roles_dto.assign_role_to_user(user_id, role_id)
 
 
-async def remove_role_from_user(user_id: int, role_id: int):
+async def remove_role_from_user_service(user_id: int, role_id: int):
     """
     Remove a role from a user.
 
@@ -58,28 +58,45 @@ async def remove_role_from_user(user_id: int, role_id: int):
     await roles_dto.remove_role_from_user(user_id, role_id)
 
 
-async def create_role(
+async def create_role_service(
     name: str, permissions: int | None = None, color: int | None = None
 ):
     """
     Create a new role for the server.
+
+    Args:
+        name (str): The name of the role to create
+        permissions (int | None): The permissions to assign to the role, represented as a bitwise integer. If None, the role will have no permissions.
+        color (int | None): The color to assign to the role, represented as an integer. If None, the role will have no color.
+
+    Returns:
+        None
     """
     return await roles_dto.create_role(name, permissions, color)
 
 
-async def edit_role(
+async def edit_role_service(
     role_id: int,
     name: str | None = None,
     permissions: int | None = None,
     color: int | None = None,
 ):
     """
-    Edit a role in the server.
+    Edit an existing role for the server.
+
+    Args:
+        role_id (int): The ID of the role to edit
+        name (str | None): The new name of the role. If None, the role's name will not be changed.
+        permissions (int | None): The new permissions to assign to the role, represented as a bitwise integer. If None, the role's permissions will not be changed.
+        color (int | None): The new color to assign to the role, represented as an integer. If None, the role's color will not be changed.
+
+    Returns:
+        None
     """
     await roles_dto.edit_role(role_id, name, permissions, color)
 
 
-async def delete_role(role_id: int):
+async def delete_role_service(role_id: int):
     """
     Delete a new role for the server.
 

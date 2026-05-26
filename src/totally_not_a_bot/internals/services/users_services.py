@@ -6,7 +6,7 @@ from totally_not_a_bot.config.models import Embed, Member
 # region User Tools
 
 
-async def get_user_info(user_id: int) -> Optional[Member]:
+async def get_user_info_service(user_id: int) -> Optional[Member]:
     """
     Get information about a user in the server, such as their username, roles, and join date.
 
@@ -19,7 +19,7 @@ async def get_user_info(user_id: int) -> Optional[Member]:
     return await users_dtos.get_user_info(user_id)
 
 
-async def send_direct_message(user_id: int, content: str):
+async def send_direct_message_service(user_id: int, content: str):
     """
     Send a direct message to a user.
 
@@ -33,7 +33,9 @@ async def send_direct_message(user_id: int, content: str):
     await users_dtos.send_direct_message(user_id, content)
 
 
-async def send_direct_message_with_embed(user_id: int, content: str, embed: Embed):
+async def send_direct_message_with_embed_service(
+    user_id: int, content: str, embed: Embed
+):
     """
     Send a direct message with an embed to a user.
 

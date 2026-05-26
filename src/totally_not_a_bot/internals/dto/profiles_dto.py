@@ -1,7 +1,7 @@
 from server import _client
 
 
-async def set_user_status_dto(status: str):
+async def set_bot_status_dto(status: str):
     """
     Set the status of the discord bot.
 
@@ -14,7 +14,7 @@ async def set_user_status_dto(status: str):
     await _client.change_presence(activity=_client.activity, status=status)
 
 
-async def set_user_activity_dto(activity_type: str, activity_name: str):
+async def set_bot_activity_dto(activity_type: str, activity_name: str):
     """
     Set the activity of the discord bot.
 

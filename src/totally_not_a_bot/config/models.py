@@ -27,7 +27,13 @@ class Channel(BaseModel):
     channel_id: int
     channel_description: Optional[str] = None
     channel_type: str
-    # TODO: add perms to channel
+
+
+class Category(BaseModel):
+    name: str
+    category_id: int
+    is_private: bool
+    allowed_role_ids: list[int]
 
 
 class Embed(BaseModel):

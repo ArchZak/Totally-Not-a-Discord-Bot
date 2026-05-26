@@ -5,7 +5,7 @@ from dto import profiles_dto
 # region Profile Tools
 
 
-async def set_user_status(status: str):
+async def set_bot_status_service(status: str):
     """
     Set the status of the discord bot.
 
@@ -15,10 +15,10 @@ async def set_user_status(status: str):
     Returns:
         None
     """
-    await profiles_dto.set_user_status_dto(status)
+    await profiles_dto.set_bot_status_dto(status)
 
 
-async def set_user_activity(
+async def set_bot_activity_service(
     activity_type: Annotated[
         Literal["playing", "streaming", "listening", "watching"],
         'The type of activity (e.g., "playing", "streaming", "listening", "watching")',
@@ -35,7 +35,7 @@ async def set_user_activity(
     Returns:
         None
     """
-    await profiles_dto.set_user_activity_dto(activity_type, activity_name)
+    await profiles_dto.set_bot_activity_dto(activity_type, activity_name)
 
 
 # endregion

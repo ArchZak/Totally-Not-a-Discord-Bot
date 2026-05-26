@@ -1,10 +1,10 @@
 import totally_not_a_bot.internals.dto.category_dtos as category_dtos
-from totally_not_a_bot.config.models import Channel
+from totally_not_a_bot.config.models import Category
 
 # region Category Tools
 
 
-async def get_all_categories_info() -> list[Channel]:
+async def get_all_categories_info_service() -> list[Category]:
     """
     Get all categories and their information in the server.
 
@@ -12,12 +12,12 @@ async def get_all_categories_info() -> list[Channel]:
         None
 
     Returns:
-        list[Channel]: A list of Channel objects representing categories
+        list[Category]: A list of Category objects representing categories
     """
     return await category_dtos.get_all_categories_info()
 
 
-async def create_category(
+async def create_category_service(
     name: str, is_private: bool = False, allowed_role_ids: list[int] | None = None
 ):
     """
@@ -34,7 +34,7 @@ async def create_category(
     await category_dtos.create_category(name, is_private, allowed_role_ids)
 
 
-async def edit_category(
+async def edit_category_service(
     category_id: int,
     new_name: str | None = None,
     is_private: bool | None = None,
@@ -57,7 +57,7 @@ async def edit_category(
     )
 
 
-async def delete_category(category_id: int):
+async def delete_category_service(category_id: int):
     """
     Delete a category from the server.
 
@@ -70,7 +70,7 @@ async def delete_category(category_id: int):
     await category_dtos.delete_category(category_id)
 
 
-async def move_category(category_id: int, new_position: int):
+async def move_category_service(category_id: int, new_position: int):
     """
     Move a category to a new position in the server.
 
