@@ -2,10 +2,8 @@ from typing import Optional
 
 from totally_not_a_bot.config.models import Channel
 from totally_not_a_bot.internals.services import channels_services
-from totally_not_a_bot.server import mcp
 
 
-@mcp.tool("get_channel_info")
 async def get_channel_info(channel_id: int) -> Optional[Channel]:
     """
     Get the description, name, and other associated information about a channel in the server.
@@ -19,7 +17,6 @@ async def get_channel_info(channel_id: int) -> Optional[Channel]:
     return await channels_services.get_channel_info_service(channel_id)
 
 
-@mcp.tool("get_all_channels_info")
 async def get_all_channels_info() -> list[Channel]:
     """
     Get information about all channels in the server.
@@ -33,7 +30,6 @@ async def get_all_channels_info() -> list[Channel]:
     return await channels_services.get_all_channels_info_service()
 
 
-@mcp.tool("create_channel")
 async def create_channel(
     name: str,
     channel_type: str,
@@ -59,7 +55,6 @@ async def create_channel(
     )
 
 
-@mcp.tool("edit_channel")
 async def edit_channel(
     channel_id: int,
     new_name: Optional[str] = None,
@@ -85,7 +80,6 @@ async def edit_channel(
     )
 
 
-@mcp.tool("delete_channel")
 async def delete_channel(channel_id: int):
     """
     Delete an existing channel from the server.
@@ -99,7 +93,6 @@ async def delete_channel(channel_id: int):
     return await channels_services.delete_channel_service(channel_id)
 
 
-@mcp.tool("move_channel")
 async def move_channel(channel_id: int, new_parent_id: int):
     """
     Move an existing channel to a different parent category.
@@ -114,7 +107,6 @@ async def move_channel(channel_id: int, new_parent_id: int):
     return await channels_services.move_channel_service(channel_id, new_parent_id)
 
 
-@mcp.tool("set_channel_position")
 async def set_channel_position(channel_id: int, position: int):
     """
     Change the position/order of a channel within its category.

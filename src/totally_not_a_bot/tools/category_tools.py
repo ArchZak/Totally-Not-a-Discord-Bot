@@ -1,9 +1,7 @@
 from totally_not_a_bot.config.models import Channel
 from totally_not_a_bot.internals.services import category_services
-from totally_not_a_bot.server import mcp
 
 
-@mcp.tool("get_all_categories_info")
 async def get_all_categories_info() -> list[Channel]:
     """
     Get all categories and their information in the server.
@@ -17,7 +15,6 @@ async def get_all_categories_info() -> list[Channel]:
     return await category_services.get_all_categories_info()
 
 
-@mcp.tool("create_category")
 async def create_category(
     name: str, is_private: bool = False, allowed_role_ids: list[int] | None = None
 ):
@@ -37,7 +34,6 @@ async def create_category(
     )
 
 
-@mcp.tool("edit_category")
 async def edit_category(
     category_id: int,
     new_name: str | None = None,
@@ -61,7 +57,6 @@ async def edit_category(
     )
 
 
-@mcp.tool("delete_category")
 async def delete_category(category_id: int):
     """
     Delete a category from the server.
@@ -75,7 +70,6 @@ async def delete_category(category_id: int):
     return await category_services.delete_category_service(category_id)
 
 
-@mcp.tool("move_category")
 async def move_category(category_id: int, new_position: int):
     """
     Move a category to a new position in the server.

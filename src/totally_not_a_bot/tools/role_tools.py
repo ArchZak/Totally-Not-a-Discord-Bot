@@ -1,9 +1,7 @@
 from totally_not_a_bot.config.models import Role
 from totally_not_a_bot.internals.services import roles_services
-from totally_not_a_bot.server import mcp
 
 
-@mcp.tool("get_all_roles")
 async def get_all_roles() -> list[Role]:
     """
     Get all roles and other associated information about the roles in the server.
@@ -17,7 +15,6 @@ async def get_all_roles() -> list[Role]:
     return await roles_services.get_all_roles_service()
 
 
-@mcp.tool("get_role_by_id")
 async def get_role_by_id(role_id: int) -> Role | None:
     """
     Get the information about a role after passing in its id.
@@ -31,7 +28,6 @@ async def get_role_by_id(role_id: int) -> Role | None:
     return await roles_services.get_role_by_id_service(role_id)
 
 
-@mcp.tool("assign_role_to_user")
 async def assign_role_to_user(user_id: int, role_id: int):
     """
     Assign a role to a user.
@@ -46,7 +42,6 @@ async def assign_role_to_user(user_id: int, role_id: int):
     return await roles_services.assign_role_to_user_service(user_id, role_id)
 
 
-@mcp.tool("remove_role_from_user")
 async def remove_role_from_user(user_id: int, role_id: int):
     """
     Remove a role from a user.
@@ -61,7 +56,6 @@ async def remove_role_from_user(user_id: int, role_id: int):
     return await roles_services.remove_role_from_user_service(user_id, role_id)
 
 
-@mcp.tool("create_role")
 async def create_role(
     name: str, permissions: int | None = None, color: int | None = None
 ):
@@ -79,7 +73,6 @@ async def create_role(
     return await roles_services.create_role_service(name, permissions, color)
 
 
-@mcp.tool("edit_role")
 async def edit_role(
     role_id: int,
     name: str | None = None,
@@ -101,7 +94,6 @@ async def edit_role(
     return await roles_services.edit_role_service(role_id, name, permissions, color)
 
 
-@mcp.tool("delete_role")
 async def delete_role(role_id: int):
     """
     Delete a new role for the server.
