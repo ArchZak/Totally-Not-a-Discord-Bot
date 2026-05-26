@@ -2,12 +2,12 @@ from typing import Optional
 
 import discord
 
+from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     GuildNotFoundError,
     MemberNotFoundError,
 )
 from totally_not_a_bot.config.models import Embed, Member
-from totally_not_a_bot.server import _client
 
 
 def _convert_member(member: discord.Member) -> Member:
@@ -55,6 +55,7 @@ async def send_direct_message_with_embed(user_id: int, content: str, embed: Embe
     """Send a direct message with an embed to a user."""
     member = fetch_user_by_id(user_id)
     if member:
-        await member.send(content, embed=embed)
+        d_embed = discord.Embed.from_dict(embed.model_dump())
+        await member.send(content, embed=d_embed)
     else:
         raise MemberNotFoundError(f"User with ID {user_id} not found.")

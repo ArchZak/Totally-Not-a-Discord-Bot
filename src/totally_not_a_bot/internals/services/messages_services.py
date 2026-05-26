@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Annotated, Optional
 
-from discord import Emoji, PartialEmoji, Reaction
+import discord
 
 import totally_not_a_bot.internals.dto.channels_dto as channels_dto
 import totally_not_a_bot.internals.dto.users_dtos as users_dto
@@ -169,11 +169,12 @@ async def send_embed_service(
         None
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
+    d_embed = discord.Embed.from_dict(embed_data.model_dump(exclude_unset=True))
     if reply_to_message_id:
         message_to_reply_to = await channel.fetch_message(reply_to_message_id)
-        await message_to_reply_to.reply(embed=embed_data.model_dump())
+        await message_to_reply_to.reply(embed=d_embed)
     else:
-        await channel.send(embed=embed_data.model_dump())
+        await channel.send(embed=d_embed)
 
 
 async def edit_embed_service(channel_id: int, message_id: int, new_embed_data: Embed):
@@ -191,7 +192,8 @@ async def edit_embed_service(channel_id: int, message_id: int, new_embed_data: E
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
     if message.author.id == users_dto.get_bot_id_dto():
-        await message.edit(embed=new_embed_data.model_dump())
+        d_embed = discord.Embed.from_dict(new_embed_data.model_dump(exclude_unset=True))
+        await message.edit(embed=d_embed)
     else:
         raise MessageOwnershipError("You can only edit messages sent by the bot.")
 
@@ -199,7 +201,7 @@ async def edit_embed_service(channel_id: int, message_id: int, new_embed_data: E
 async def add_reaction_service(
     channel_id: int,
     message_id: int,
-    emoji: Annotated[str, Emoji, PartialEmoji, Reaction, "the emoji to add"],
+    emoji: str,
 ):
     """
     Add a reaction to a specific message.
@@ -220,7 +222,7 @@ async def add_reaction_service(
 async def remove_reaction_service(
     channel_id: int,
     message_id: int,
-    emoji: Annotated[str, Emoji, PartialEmoji, Reaction, "the emoji to remove"],
+    emoji: str,
 ):
     """
     Remove a reaction sent by the bot from a specific message.

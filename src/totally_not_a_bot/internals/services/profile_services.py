@@ -1,6 +1,6 @@
 from typing import Annotated, Literal
 
-from dto import profiles_dto
+import totally_not_a_bot.internals.dto.profiles_dto as profiles_dto
 
 # region Profile Tools
 

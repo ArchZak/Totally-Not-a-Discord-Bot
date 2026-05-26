@@ -2,13 +2,13 @@ from typing import Optional
 
 import discord
 
+from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     CategoryNotFoundError,
     ChannelNotFoundError,
     GuildNotFoundError,
 )
 from totally_not_a_bot.config.models import Channel
-from totally_not_a_bot.server import _client
 
 
 def _convert_channel(channel: discord.abc.GuildChannel) -> Channel:

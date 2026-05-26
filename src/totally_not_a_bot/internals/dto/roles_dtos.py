@@ -1,12 +1,12 @@
 import discord
 
+from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     GuildNotFoundError,
     MemberNotFoundError,
     RoleNotFoundError,
 )
 from totally_not_a_bot.config.models import Role
-from totally_not_a_bot.server import _client
 
 
 def _convert_role(role: discord.Role) -> Role:

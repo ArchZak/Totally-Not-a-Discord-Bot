@@ -1,4 +1,4 @@
-from server import _client
+from totally_not_a_bot.config.app import _client
 
 
 async def set_bot_status_dto(status: str):

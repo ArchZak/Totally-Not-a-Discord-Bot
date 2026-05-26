@@ -1,11 +1,11 @@
 import discord
 
+from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     CategoryNotFoundError,
     GuildNotFoundError,
 )
 from totally_not_a_bot.config.models import Category
-from totally_not_a_bot.server import _client
 
 
 def _convert_category(category: discord.CategoryChannel) -> Category:
