@@ -234,23 +234,21 @@ tnb/server/invites - active invite links
 
 ## Blockers
 
-Where should logging be available for users to see?\
 1-1 where LLM controls one bot or 1-many where it controls many bots. So instatinate bots and store them in memory or something.
 Error handling at the handler level
 
 TODO: schedule events, channel override\
 What prompts should I add?\
-Bitmapping tools and resources across tiers
 
 Add local vector database for memory across sessions? is that an agent responsibility?
-
-Three tiers of perms where 1 is like a user, 2 is like a support ish role, and 3 is an admin
 
 List bulk actions that should exist in the memory layer
 
 Go through docs and do thorough checks of what each type of service is missing, such as attaching files to messages, or adding fields to embeds
 
 Look into the error handling of stuff / stuff fails gracefully if resources come up empty or cant be found
+
+Test suite to benchmark tool call speeds? idk
 
 
 ## Testing Plan
