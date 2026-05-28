@@ -6,9 +6,9 @@ import discord
 import totally_not_a_bot.internals.dto.channels_dto as channels_dto
 import totally_not_a_bot.internals.dto.users_dtos as users_dto
 from totally_not_a_bot.config.app import _client
-from totally_not_a_bot.config.exceptions import GuildNotFoundError
 from totally_not_a_bot.config.exceptions import (
     ChannelNotFoundError,
+    GuildNotFoundError,
     MessageNotFoundError,
     MessageOwnershipError,
 )
@@ -35,7 +35,9 @@ async def get_recent_messages_service(
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     if timestamp is None:
         timestamp = datetime.now(datetime.timezone.utc) - timedelta(minutes=30)
     return [
@@ -61,7 +63,9 @@ async def get_pinned_messages_service(channel_id: int) -> list[Message]:
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     return [
         Message(
             content=msg.content,
@@ -88,7 +92,9 @@ async def get_thread_from_message_service(
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")
@@ -149,7 +155,9 @@ async def edit_message_service(channel_id: int, message_id: int, new_content: st
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")
@@ -172,7 +180,9 @@ async def delete_message_service(channel_id: int, message_id: int):
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")
@@ -200,7 +210,9 @@ async def send_embed_service(
     channel = _client.get_channel(channel_id)
     d_embed = discord.Embed.from_dict(embed_data.model_dump(exclude_unset=True))
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     if reply_to_message_id:
         message_to_reply_to = await channel.fetch_message(reply_to_message_id)
         if message_to_reply_to is None:
@@ -226,7 +238,9 @@ async def edit_embed_service(channel_id: int, message_id: int, new_embed_data: E
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")
@@ -255,7 +269,9 @@ async def add_reaction_service(
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")
@@ -280,7 +296,9 @@ async def remove_reaction_service(
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")
@@ -303,7 +321,9 @@ async def pin_message_service(
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")
@@ -326,7 +346,9 @@ async def unpin_message_service(
     """
     channel = _client.get_channel(channel_id)
     if channel is None or getattr(channel.guild, "id", None) != _client.target_guild_id:
-        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found in target guild.")
+        raise ChannelNotFoundError(
+            f"Channel with ID {channel_id} not found in target guild."
+        )
     message = await channel.fetch_message(message_id)
     if message is None:
         raise MessageNotFoundError(f"Message with ID {message_id} not found.")

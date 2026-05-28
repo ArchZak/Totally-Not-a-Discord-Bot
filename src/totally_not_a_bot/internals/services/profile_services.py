@@ -1,6 +1,7 @@
 from typing import Literal
 
 import discord
+
 from totally_not_a_bot.config.app import _client
 
 # region Profile Tools
@@ -33,7 +34,10 @@ async def set_bot_activity_service(
     Returns:
         None
     """
-    activity = discord.Activity(name=activity_name, type=getattr(discord.ActivityType, activity_type, discord.ActivityType.playing))
+    activity = discord.Activity(
+        name=activity_name,
+        type=getattr(discord.ActivityType, activity_type, discord.ActivityType.playing),
+    )
     await _client.change_presence(activity=activity)
 
 
