@@ -50,4 +50,18 @@ async def send_direct_message_with_embed_service(
     await users_dtos.send_direct_message_with_embed(user_id, content, embed)
 
 
+async def change_user_nickname_service(user_id: int, new_nickname: str):
+    """
+    Change the nickname of a user in the server.
+
+    Args:
+        user_id (int): The ID of the user to change the nickname for
+        new_nickname (str): The new nickname to set for the user
+
+    Returns:
+        None
+    """
+    await users_dtos.change_user_nickname(user_id, new_nickname)
+
+
 # endregion

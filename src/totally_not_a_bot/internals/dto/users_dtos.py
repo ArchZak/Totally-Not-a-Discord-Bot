@@ -59,3 +59,12 @@ async def send_direct_message_with_embed(user_id: int, content: str, embed: Embe
         await member.send(content, embed=d_embed)
     else:
         raise MemberNotFoundError(f"User with ID {user_id} not found.")
+
+
+async def change_user_nickname(user_id: int, new_nickname: str):
+    """Change the nickname of a user in the server."""
+    member = fetch_user_by_id(user_id)
+    if member:
+        await member.edit(nick=new_nickname)
+    else:
+        raise MemberNotFoundError(f"User with ID {user_id} not found.")

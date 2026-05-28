@@ -52,11 +52,15 @@ from totally_not_a_bot.tools.user_tools import (
     send_direct_message_with_embed,
 )
 
+# Category tools
+
 mcp.add_tool(get_all_categories_info)
 mcp.add_tool(create_category)
 mcp.add_tool(edit_category)
 mcp.add_tool(delete_category)
 mcp.add_tool(move_category)
+
+# Channel tools
 
 mcp.add_tool(get_channel_info)
 mcp.add_tool(get_all_channels_info)
@@ -65,6 +69,8 @@ mcp.add_tool(edit_channel)
 mcp.add_tool(delete_channel)
 mcp.add_tool(move_channel)
 mcp.add_tool(set_channel_position)
+
+# Message tools
 
 mcp.add_tool(get_recent_messages)
 mcp.add_tool(get_pinned_messages)
@@ -79,8 +85,12 @@ mcp.add_tool(unpin_message)
 mcp.add_tool(add_reaction)
 mcp.add_tool(remove_reaction)
 
+# Profile tools
+
 mcp.add_tool(set_bot_status)
 mcp.add_tool(set_bot_activity)
+
+# Role tools
 
 mcp.add_tool(get_all_roles)
 mcp.add_tool(get_role_by_id)
@@ -89,6 +99,8 @@ mcp.add_tool(remove_role_from_user)
 mcp.add_tool(create_role)
 mcp.add_tool(edit_role)
 mcp.add_tool(delete_role)
+
+# User tools
 
 mcp.add_tool(get_user_info)
 mcp.add_tool(send_direct_message)
