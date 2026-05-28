@@ -19,8 +19,12 @@ async def get_all_categories_info() -> list[Channel]:
 
 async def create_category(
     name: Annotated[str, "The name of the new category"],
-    is_private: Annotated[bool, "Whether the category should be hidden from @everyone"] = False,
-    allowed_role_ids: Annotated[list[int] | None, "A list of role IDs allowed to view this category"] = None
+    is_private: Annotated[
+        bool, "Whether the category should be hidden from @everyone"
+    ] = False,
+    allowed_role_ids: Annotated[
+        list[int] | None, "A list of role IDs allowed to view this category"
+    ] = None,
 ):
     """
     Create a new category in the server.
@@ -41,8 +45,12 @@ async def create_category(
 async def edit_category(
     category_id: Annotated[int, "The ID of the category to edit"],
     new_name: Annotated[str | None, "The new name for the category"] = None,
-    is_private: Annotated[bool | None, "Whether the category should be hidden from @everyone"] = None,
-    allowed_role_ids: Annotated[list[int] | None, "A list of role IDs allowed to view this category"] = None,
+    is_private: Annotated[
+        bool | None, "Whether the category should be hidden from @everyone"
+    ] = None,
+    allowed_role_ids: Annotated[
+        list[int] | None, "A list of role IDs allowed to view this category"
+    ] = None,
 ):
     """
     Edit the name or permissions of a category in the server.
@@ -61,7 +69,9 @@ async def edit_category(
     )
 
 
-async def delete_category(category_id: Annotated[int, "The ID of the category to delete"]):
+async def delete_category(
+    category_id: Annotated[int, "The ID of the category to delete"],
+):
     """
     Delete a category from the server.
 
@@ -76,7 +86,7 @@ async def delete_category(category_id: Annotated[int, "The ID of the category to
 
 async def move_category(
     category_id: Annotated[int, "The ID of the category to move"],
-    new_position: Annotated[int, "The new position for the category (0-based index)"]
+    new_position: Annotated[int, "The new position for the category (0-based index)"],
 ):
     """
     Move a category to a new position in the server.

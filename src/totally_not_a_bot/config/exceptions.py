@@ -27,6 +27,10 @@ class MessageOwnershipError(Exception):
     """Raised when trying to mutate a message not owned by the bot."""
 
 
+class MessageNotFoundError(Exception):
+    """Raised when a message with the specified ID is not found."""
+
+
 # endregion
 
 # region Role Errors

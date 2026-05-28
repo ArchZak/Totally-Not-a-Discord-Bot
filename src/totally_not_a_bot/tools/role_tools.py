@@ -68,8 +68,14 @@ async def remove_role_from_user(
 
 async def create_role(
     name: Annotated[str, "The name of the role to create"],
-    permissions: Annotated[int | None, "The permissions to assign to the role, represented as a bitwise integer. If None, the role will have no permissions"] = None,
-    color: Annotated[int | None, "The color to assign to the role, represented as an integer. If None, the role will have no color"] = None,
+    permissions: Annotated[
+        int | None,
+        "The permissions to assign to the role, represented as a bitwise integer. If None, the role will have no permissions",
+    ] = None,
+    color: Annotated[
+        int | None,
+        "The color to assign to the role, represented as an integer. If None, the role will have no color",
+    ] = None,
 ):
     """
     Create a new role for the server.
@@ -87,9 +93,18 @@ async def create_role(
 
 async def edit_role(
     role_id: Annotated[int, "The ID of the role to edit"],
-    name: Annotated[str | None, "The new name of the role. If None, the role's name will not be changed."] = None,
-    permissions: Annotated[int | None, "The new permissions to assign to the role, represented as a bitwise integer. If None, the role's permissions will not be changed."] = None,
-    color: Annotated[int | None, "The new color to assign to the role, represented as an integer. If None, the role's color will not be changed."] = None,
+    name: Annotated[
+        str | None,
+        "The new name of the role. If None, the role's name will not be changed.",
+    ] = None,
+    permissions: Annotated[
+        int | None,
+        "The new permissions to assign to the role, represented as a bitwise integer. If None, the role's permissions will not be changed.",
+    ] = None,
+    color: Annotated[
+        int | None,
+        "The new color to assign to the role, represented as an integer. If None, the role's color will not be changed.",
+    ] = None,
 ):
     """
     Edit an existing role for the server.

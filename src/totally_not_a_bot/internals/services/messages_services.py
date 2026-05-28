@@ -5,7 +5,11 @@ import discord
 
 import totally_not_a_bot.internals.dto.channels_dto as channels_dto
 import totally_not_a_bot.internals.dto.users_dtos as users_dto
-from totally_not_a_bot.config.exceptions import MessageOwnershipError
+from totally_not_a_bot.config.exceptions import (
+    ChannelNotFoundError,
+    MessageNotFoundError,
+    MessageOwnershipError,
+)
 from totally_not_a_bot.config.models import Embed, Message
 
 # region Message Tools
@@ -28,6 +32,8 @@ async def get_recent_messages_service(
         list[Message]: A list of Message objects representing the recent messages in the channel
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
     if timestamp is None:
         timestamp = datetime.now(datetime.timezone.utc) - timedelta(minutes=30)
     return [
@@ -52,6 +58,8 @@ async def get_pinned_messages_service(channel_id: int) -> list[Message]:
         list[Message]: A list of Message objects representing the pinned messages in the channel
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
     return [
         Message(
             content=msg.content,
@@ -78,6 +86,10 @@ async def get_thread_from_message_service(
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
 
     if not message.thread:
         return []
@@ -108,8 +120,14 @@ async def send_message_service(
         None
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
     if reply_to_message_id:
         message_to_reply_to = await channel.fetch_message(reply_to_message_id)
+        if message_to_reply_to is None:
+            raise MessageNotFoundError(
+                f"Message with ID {reply_to_message_id} not found."
+            )
         await message_to_reply_to.reply(content)
     else:
         await channel.send(content)
@@ -129,6 +147,10 @@ async def edit_message_service(channel_id: int, message_id: int, new_content: st
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
     if message.author.id == channels_dto.get_bot_id_dto():
         await message.edit(content=new_content)
     else:
@@ -148,6 +170,11 @@ async def delete_message_service(channel_id: int, message_id: int):
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
+
     if message.author.id == users_dto.get_bot_id_dto():
         await message.delete()
     else:
@@ -170,8 +197,14 @@ async def send_embed_service(
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     d_embed = discord.Embed.from_dict(embed_data.model_dump(exclude_unset=True))
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
     if reply_to_message_id:
         message_to_reply_to = await channel.fetch_message(reply_to_message_id)
+        if message_to_reply_to is None:
+            raise MessageNotFoundError(
+                f"Message with ID {reply_to_message_id} not found."
+            )
         await message_to_reply_to.reply(embed=d_embed)
     else:
         await channel.send(embed=d_embed)
@@ -191,6 +224,10 @@ async def edit_embed_service(channel_id: int, message_id: int, new_embed_data: E
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
     if message.author.id == users_dto.get_bot_id_dto():
         d_embed = discord.Embed.from_dict(new_embed_data.model_dump(exclude_unset=True))
         await message.edit(embed=d_embed)
@@ -216,6 +253,10 @@ async def add_reaction_service(
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
     await message.add_reaction(emoji)
 
 
@@ -237,6 +278,10 @@ async def remove_reaction_service(
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
     await message.remove_reaction(emoji)
 
 
@@ -256,6 +301,10 @@ async def pin_message_service(
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
     await message.pin(reason=reason)
 
 
@@ -275,6 +324,10 @@ async def unpin_message_service(
     """
     channel = channels_dto.fetch_channel_by_id(channel_id)
     message = await channel.fetch_message(message_id)
+    if channel is None:
+        raise ChannelNotFoundError(f"Channel with ID {channel_id} not found.")
+    if message is None:
+        raise MessageNotFoundError(f"Message with ID {message_id} not found.")
     await message.unpin(reason=reason)
 
 

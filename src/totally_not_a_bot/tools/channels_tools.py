@@ -4,7 +4,9 @@ from totally_not_a_bot.config.models import Channel
 from totally_not_a_bot.internals.services import channels_services
 
 
-async def get_channel_info(channel_id: Annotated[int, "The ID of the channel to fetch information from"]) -> Optional[Channel]:
+async def get_channel_info(
+    channel_id: Annotated[int, "The ID of the channel to fetch information from"],
+) -> Optional[Channel]:
     """
     Get the description, name, and other associated information about a channel in the server.
 
@@ -36,9 +38,15 @@ async def create_channel(
         Literal["text", "voice", "forum"],
         "The type of channel to create (e.g., 'text', 'voice', 'forum')",
     ],
-    parent_id: Annotated[Optional[int], "The ID of the parent category for the channel, if applicable"] = None,
-    is_private: Annotated[bool, "Whether the channel should be hidden from @everyone"] = False,
-    allowed_role_ids: Annotated[Optional[list[int]], "A list of role IDs allowed to view this channel"] = None,
+    parent_id: Annotated[
+        Optional[int], "The ID of the parent category for the channel, if applicable"
+    ] = None,
+    is_private: Annotated[
+        bool, "Whether the channel should be hidden from @everyone"
+    ] = False,
+    allowed_role_ids: Annotated[
+        Optional[list[int]], "A list of role IDs allowed to view this channel"
+    ] = None,
 ):
     """
     Create a new channel in the server with the specified name, type, and optional parent category.
@@ -60,10 +68,20 @@ async def create_channel(
 
 async def edit_channel(
     channel_id: Annotated[int, "The ID of the channel to edit"],
-    new_name: Annotated[Optional[str], "The new name for the channel, if changing"] = None,
-    new_parent_id: Annotated[Optional[int], "The new parent category ID for the channel, if changing"] = None,
-    is_private: Annotated[Optional[bool], "Whether the channel should be hidden from @everyone, if changing"] = None,
-    allowed_role_ids: Annotated[Optional[list[int]], "A new list of role IDs allowed to view this channel, if changing"] = None,
+    new_name: Annotated[
+        Optional[str], "The new name for the channel, if changing"
+    ] = None,
+    new_parent_id: Annotated[
+        Optional[int], "The new parent category ID for the channel, if changing"
+    ] = None,
+    is_private: Annotated[
+        Optional[bool],
+        "Whether the channel should be hidden from @everyone, if changing",
+    ] = None,
+    allowed_role_ids: Annotated[
+        Optional[list[int]],
+        "A new list of role IDs allowed to view this channel, if changing",
+    ] = None,
 ):
     """
     Edit the properties of an existing channel, such as its name, parent category, privacy settings, and allowed roles.
@@ -98,7 +116,9 @@ async def delete_channel(channel_id: Annotated[int, "The ID of the channel to de
 
 async def move_channel(
     channel_id: Annotated[int, "The ID of the channel to move"],
-    new_parent_id: Annotated[int, "The ID of the new parent category to move the channel under"],
+    new_parent_id: Annotated[
+        int, "The ID of the new parent category to move the channel under"
+    ],
 ):
     """
     Move an existing channel to a different parent category.
@@ -115,7 +135,9 @@ async def move_channel(
 
 async def set_channel_position(
     channel_id: Annotated[int, "The ID of the channel to reposition"],
-    position: Annotated[int, "The new position index for the channel within its category (0-based)"],
+    position: Annotated[
+        int, "The new position index for the channel within its category (0-based)"
+    ],
 ):
     """
     Change the position/order of a channel within its category.
