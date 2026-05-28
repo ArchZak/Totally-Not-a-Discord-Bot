@@ -1,26 +1,34 @@
 import discord
 
 import totally_not_a_bot.internals.dto.category_dtos as category_dtos
+import totally_not_a_bot.internals.services.channels_services as channels_services
 from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     CategoryNotFoundError,
     GuildNotFoundError,
 )
-from totally_not_a_bot.config.models import Category
+from totally_not_a_bot.config.models import Category, ChannelParam
 
 # region Category Tools
 
 
+async def get_category_info(category_id: int) -> Category:
+    """Get the information about a category."""
+    category = _client.get_channel(category_id)
+    if (
+        not category
+        or not isinstance(category, discord.CategoryChannel)
+        or category.guild.id != _client.target_guild_id
+    ):
+        raise CategoryNotFoundError(
+            "Category with the specified ID not found in the target guild."
+        )
+
+    return category_dtos._convert_category(category)
+
+
 async def get_all_categories_info_service() -> list[Category]:
-    """
-    Get all categories and their information in the server.
-
-    Args:
-        None
-
-    Returns:
-        list[Category]: A list of Category objects representing categories
-    """
+    """Get all categories and their information in the server."""
     guild = _client.get_guild(_client.target_guild_id)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
@@ -31,17 +39,7 @@ async def get_all_categories_info_service() -> list[Category]:
 async def create_category_service(
     name: str, is_private: bool = False, allowed_role_ids: list[int] | None = None
 ):
-    """
-    Create a new category in the server.
-
-    Args:
-        name (str): The name of the new category
-        is_private (bool): Whether the category should be hidden from @everyone
-        allowed_role_ids (list[int] | None): A list of role IDs allowed to view this category
-
-    Returns:
-        None
-    """
+    """Create a new category in the server."""
     guild = _client.get_guild(_client.target_guild_id)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
@@ -65,23 +63,21 @@ async def create_category_service(
 
 async def create_category_with_channels_service(
     name: str,
-    channels: list[dict],
+    channels: list[ChannelParam],
     is_private: bool = False,
     allowed_role_ids: list[int] | None = None,
 ):
-    """
-    Create a new category in the server along with specified channels within it.
-
-    Args:
-        name (str): The name of the new category
-        channels (list[dict]): A list of dictionaries representing channels to create within the category, each with a 'name' and 'type' (e.g., 'text', 'voice', 'forum')
-        is_private (bool): Whether the category should be hidden from @everyone
-        allowed_role_ids (list[int] | None): A list of role IDs allowed to view this category
-
-    Returns:
-        None
-    """
+    """Create a new category in the server along with specified channels within it."""
     category_id = await create_category_service(name, is_private, allowed_role_ids)
+    for channel in channels:
+        await channels_services.create_channel_service(
+            name=channel.name,
+            channel_type=channel.channel_type,
+            parent_id=category_id,
+            is_private=is_private,
+        )
+
+    return category_id
 
 
 async def edit_category_service(

@@ -47,7 +47,7 @@ async def create_channel(
     allowed_role_ids: Annotated[
         Optional[list[int]], "A list of role IDs allowed to view this channel"
     ] = None,
-):
+) -> int:
     """
     Create a new channel in the server with the specified name, type, and optional parent category.
 
@@ -59,7 +59,7 @@ async def create_channel(
         allowed_role_ids (Optional[list[int]]): A list of role IDs allowed to view this channel
 
     Returns:
-        None
+        channel_id (int): The ID of the newly created channel
     """
     return await channels_services.create_channel_service(
         name, channel_type, parent_id, is_private, allowed_role_ids

@@ -40,7 +40,7 @@ async def create_channel_service(
     parent_id: Optional[int] = None,
     is_private: bool = False,
     allowed_role_ids: Optional[list[int]] = None,
-):
+) -> int:
     guild = _client.get_guild(_client.target_guild_id)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
@@ -59,17 +59,19 @@ async def create_channel_service(
 
     channel_type_lower = str(channel_type).lower()
     if channel_type_lower == "voice":
-        await guild.create_voice_channel(
+        channel = await guild.create_voice_channel(
             name=name, category=category, overwrites=overwrites if overwrites else None
         )
     elif channel_type_lower == "forum":
-        await guild.create_forum(
+        channel = await guild.create_forum(
             name=name, category=category, overwrites=overwrites if overwrites else None
         )
     else:
-        await guild.create_text_channel(
+        channel = await guild.create_text_channel(
             name=name, category=category, overwrites=overwrites if overwrites else None
         )
+
+    return channel.id
 
 
 async def edit_channel_service(

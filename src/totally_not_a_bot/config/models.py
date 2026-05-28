@@ -41,6 +41,13 @@ class Category(BaseModel):
     category_id: int
     is_private: bool
     allowed_role_ids: list[int]
+    channels: Optional[list[Channel]] = None
+
+
+class CategoryParam(TypedDict, total=False):
+    name: str
+    is_private: bool
+    allowed_role_ids: list[int] | None
 
 
 class Embed(BaseModel):
