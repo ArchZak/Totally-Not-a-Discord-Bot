@@ -1,60 +1,75 @@
 from typing import Literal, Optional
 
+import discord
+
 import totally_not_a_bot.internals.dto.channels_dto as channels_dto
+from totally_not_a_bot.config.app import _client
+from totally_not_a_bot.config.exceptions import (
+    CategoryNotFoundError,
+    ChannelNotFoundError,
+    GuildNotFoundError,
+)
 from totally_not_a_bot.config.models import Channel
 
 # region Channel Tools
 
 
 async def get_channel_info_service(channel_id: int) -> Optional[Channel]:
-    """
-    Get the description, name, and other associated information about a channel in the server.
-
-    Args:
-        channel_id (int): The ID of the channel to fetch information from
-
-    Returns:
-        Optional[Channel]: A Channel object containing the channel's information, such as its name, description, and other relevant details
-    """
-    return await channels_dto.get_channel_info(channel_id)
+    channel = _client.get_channel(channel_id)
+    if (
+        not channel
+        or not isinstance(channel, discord.abc.GuildChannel)
+        or getattr(channel.guild, "id", None) != _client.target_guild_id
+    ):
+        raise ChannelNotFoundError(
+            "Channel with the specified ID not found in the target guild."
+        )
+    return channels_dto._convert_channel(channel)
 
 
 async def get_all_channels_info_service() -> list[Channel]:
-    """
-    Get information about all channels in the server.
-
-    Args:
-        None
-
-    Returns:
-        list[Channel]: A list of Channel objects, each containing information about a channel in the server
-    """
-    return await channels_dto.get_all_channels_info()
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    return [channels_dto._convert_channel(c) for c in guild.channels]
 
 
 async def create_channel_service(
     name: str,
-    channel_type: Literal["text", "voice", "forum"],
+    channel_type: Literal["text", "voice", "forum"] | str,
     parent_id: Optional[int] = None,
     is_private: bool = False,
     allowed_role_ids: Optional[list[int]] = None,
 ):
-    """
-    Create a new channel in the server with the specified name, type, and optional parent category.
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
 
-    Args:
-        name (str): The name of the new channel
-        channel_type (str): The type of the channel (e.g., "text", "voice", "forum")
-        parent_id (Optional[int]): The ID of the parent category for the channel, if applicable
-        is_private (bool): Whether the channel should be hidden from @everyone
-        allowed_role_ids (Optional[list[int]]): A list of role IDs allowed to view this channel
+    category = guild.get_channel(parent_id) if parent_id else None
 
-    Returns:
-        None
-    """
-    await channels_dto.create_channel(
-        name, channel_type, parent_id, is_private, allowed_role_ids
-    )
+    overwrites = {}
+    if is_private:
+        overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
+
+    if allowed_role_ids:
+        for role_id in allowed_role_ids:
+            role = guild.get_role(role_id)
+            if role:
+                overwrites[role] = discord.PermissionOverwrite(view_channel=True)
+
+    channel_type_lower = str(channel_type).lower()
+    if channel_type_lower == "voice":
+        await guild.create_voice_channel(
+            name=name, category=category, overwrites=overwrites if overwrites else None
+        )
+    elif channel_type_lower == "forum":
+        await guild.create_forum(
+            name=name, category=category, overwrites=overwrites if overwrites else None
+        )
+    else:
+        await guild.create_text_channel(
+            name=name, category=category, overwrites=overwrites if overwrites else None
+        )
 
 
 async def edit_channel_service(
@@ -64,63 +79,95 @@ async def edit_channel_service(
     is_private: Optional[bool] = None,
     allowed_role_ids: Optional[list[int]] = None,
 ):
-    """
-    Edit the name, parent category, or permissions of an existing channel in the server.
+    channel = _client.get_channel(channel_id)
+    if (
+        not channel
+        or not isinstance(channel, discord.abc.GuildChannel)
+        or getattr(channel.guild, "id", None) != _client.target_guild_id
+    ):
+        raise ChannelNotFoundError(
+            "Channel with the specified ID not found in the target guild."
+        )
 
-    Args:
-        channel_id (int): The ID of the channel to edit
-        new_name (Optional[str]): The new name for the channel, if changing
-        new_parent_id (Optional[int]): The new parent category ID for the channel, if changing
-        is_private (Optional[bool]): Whether the channel should be hidden from @everyone
-        allowed_role_ids (Optional[list[int]]): A list of role IDs allowed to view this channel
+    kwargs = {}
+    if new_name is not None:
+        kwargs["name"] = new_name
+    if new_parent_id is not None:
+        category = _client.get_channel(new_parent_id)
+        if category and getattr(category.guild, "id", None) == _client.target_guild_id:
+            kwargs["category"] = category
 
-    Returns:
-        None
-    """
-    await channels_dto.edit_channel(
-        channel_id, new_name, new_parent_id, is_private, allowed_role_ids
-    )
+    if is_private is not None or allowed_role_ids is not None:
+        overwrites = channel.overwrites
+        guild = channel.guild
+
+        if is_private is not None:
+            if is_private:
+                overwrites[guild.default_role] = discord.PermissionOverwrite(
+                    view_channel=False
+                )
+            else:
+                overwrites[guild.default_role] = discord.PermissionOverwrite(
+                    view_channel=None
+                )
+
+        if allowed_role_ids is not None:
+            for role_id in allowed_role_ids:
+                role = guild.get_role(role_id)
+                if role:
+                    overwrites[role] = discord.PermissionOverwrite(view_channel=True)
+
+        kwargs["overwrites"] = overwrites
+
+    if kwargs:
+        await channel.edit(**kwargs)
 
 
 async def delete_channel_service(channel_id: int):
-    """
-    Delete an existing channel from the server.
-
-    Args:
-        channel_id (int): The ID of the channel to delete
-
-    Returns:
-        None
-    """
-    await channels_dto.delete_channel(channel_id)
+    channel = _client.get_channel(channel_id)
+    if (
+        not channel
+        or not isinstance(channel, discord.abc.GuildChannel)
+        or getattr(channel.guild, "id", None) != _client.target_guild_id
+    ):
+        raise ChannelNotFoundError(
+            "Channel with the specified ID not found in the target guild."
+        )
+    await channel.delete()
 
 
 async def move_channel_service(channel_id: int, new_parent_id: int):
-    """
-    Move an existing channel to a different parent category.
+    channel = _client.get_channel(channel_id)
+    if (
+        not channel
+        or not isinstance(channel, discord.abc.GuildChannel)
+        or getattr(channel.guild, "id", None) != _client.target_guild_id
+    ):
+        raise ChannelNotFoundError(
+            "Channel with the specified ID not found in the target guild."
+        )
 
-    Args:
-        channel_id (int): The ID of the channel to move
-        new_parent_id (int): The ID of the new parent category for the channel
-
-    Returns:
-        None
-    """
-    await channels_dto.move_channel(channel_id, new_parent_id)
+    category = _client.get_channel(new_parent_id)
+    if category and getattr(category.guild, "id", None) == _client.target_guild_id:
+        await channel.edit(category=category)
+    else:
+        raise CategoryNotFoundError(
+            "Category with the specified ID not found in the target guild."
+        )
 
 
 async def set_channel_position_service(channel_id: int, position: int):
-    """
-    Change the position/order of a channel within its category.
+    channel = _client.get_channel(channel_id)
+    if (
+        not channel
+        or not isinstance(channel, discord.abc.GuildChannel)
+        or getattr(channel.guild, "id", None) != _client.target_guild_id
+    ):
+        raise ChannelNotFoundError(
+            "Channel with the specified ID not found in the target guild."
+        )
 
-    Args:
-        channel_id (int): The ID of the channel to move
-        position (int): The new position/order for the channel
-
-    Returns:
-        None
-    """
-    await channels_dto.set_channel_position(channel_id, position)
+    await channel.edit(position=position)
 
 
 # endregion

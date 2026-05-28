@@ -3,7 +3,8 @@ from loguru import logger
 
 
 class TotallyNotABot(discord.Client):
-    def __init__(self):
+    def __init__(self, target_guild_id: int):
+        self.target_guild_id = target_guild_id
         intents = discord.Intents.default()
         intents.members = True
         intents.message_content = True

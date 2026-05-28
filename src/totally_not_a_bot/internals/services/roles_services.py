@@ -1,5 +1,8 @@
+import discord
 import totally_not_a_bot.internals.dto.roles_dtos as roles_dto
+from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.models import Role
+from totally_not_a_bot.config.exceptions import GuildNotFoundError, RoleNotFoundError, MemberNotFoundError
 
 # region Roles Tools
 
@@ -14,7 +17,10 @@ async def get_all_roles_service() -> list[Role]:
     Returns:
         list[Role]: A list of Role objects representing the roles in the server
     """
-    return await roles_dto.get_all_roles_in_guild()
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    return [roles_dto._convert_role(r) for r in guild.roles]
 
 
 async def get_role_by_id_service(role_id: int) -> Role | None:
@@ -27,7 +33,13 @@ async def get_role_by_id_service(role_id: int) -> Role | None:
     Returns:
         Role: An object representing the role in the server
     """
-    return await roles_dto.get_role_by_id(role_id)
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    role = guild.get_role(role_id)
+    if not role:
+        raise RoleNotFoundError("Role with the specified ID not found.")
+    return roles_dto._convert_role(role)
 
 
 async def assign_role_to_user_service(user_id: int, role_id: int):
@@ -41,7 +53,18 @@ async def assign_role_to_user_service(user_id: int, role_id: int):
     Returns:
         None
     """
-    await roles_dto.assign_role_to_user(user_id, role_id)
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    member = guild.get_member(user_id)
+    role = guild.get_role(role_id)
+    if member and role:
+        await member.add_roles(role)
+    else:
+        if not member:
+            raise MemberNotFoundError("User with the specified ID not found.")
+        if not role:
+            raise RoleNotFoundError("Role with the specified ID not found.")
 
 
 async def remove_role_from_user_service(user_id: int, role_id: int):
@@ -55,7 +78,18 @@ async def remove_role_from_user_service(user_id: int, role_id: int):
     Returns:
         None
     """
-    await roles_dto.remove_role_from_user(user_id, role_id)
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    member = guild.get_member(user_id)
+    role = guild.get_role(role_id)
+    if member and role:
+        await member.remove_roles(role)
+    else:
+        if not member:
+            raise MemberNotFoundError("User with the specified ID not found.")
+        if not role:
+            raise RoleNotFoundError("Role with the specified ID not found.")
 
 
 async def create_role_service(
@@ -72,7 +106,16 @@ async def create_role_service(
     Returns:
         None
     """
-    return await roles_dto.create_role(name, permissions, color)
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    kwargs = {"name": name}
+    if permissions is not None:
+        kwargs["permissions"] = discord.Permissions(permissions)
+    if color is not None:
+        kwargs["color"] = discord.Color(color)
+    role = await guild.create_role(**kwargs)
+    return roles_dto._convert_role(role)
 
 
 async def edit_role_service(
@@ -93,7 +136,21 @@ async def edit_role_service(
     Returns:
         None
     """
-    await roles_dto.edit_role(role_id, name, permissions, color)
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    role = guild.get_role(role_id)
+    if not role:
+        raise RoleNotFoundError("Role with the specified ID not found.")
+    kwargs = {}
+    if name is not None:
+        kwargs["name"] = name
+    if permissions is not None:
+        kwargs["permissions"] = discord.Permissions(permissions)
+    if color is not None:
+        kwargs["color"] = discord.Color(color)
+    if kwargs:
+        await role.edit(**kwargs)
 
 
 async def delete_role_service(role_id: int):
@@ -106,7 +163,14 @@ async def delete_role_service(role_id: int):
     Returns:
         None
     """
-    await roles_dto.delete_role(role_id)
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    role = guild.get_role(role_id)
+    if role:
+        await role.delete()
+    else:
+        raise RoleNotFoundError("Role with the specified ID not found.")
 
 
 # endregion

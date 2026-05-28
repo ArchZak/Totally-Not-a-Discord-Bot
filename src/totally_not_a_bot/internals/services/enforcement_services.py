@@ -1,98 +1,84 @@
+import datetime
 from typing import Optional
 
-import totally_not_a_bot.internals.dto.enforcement_dtos as enforcement_dto
+import discord
+
+from totally_not_a_bot.config.app import _client
+from totally_not_a_bot.config.exceptions import (
+    ChannelNotFoundError,
+    GuildNotFoundError,
+    MemberNotFoundError,
+)
 
 
-async def mute_user_service(user_id: int, duration_minutes: Optional[int] = None):
-    """
-    Mute a user in the server, preventing them from sending messages or speaking in voice channels.
+async def fetch_member(user_id: int):
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    member = guild.get_member(user_id)
+    if not member:
+        # Try fetching if not in cache
+        try:
+            member = await guild.fetch_member(user_id)
+        except discord.NotFound:
+            member = None
+    if not member:
+        raise MemberNotFoundError(f"User with ID {user_id} not found in target guild.")
+    return member
 
-    Args:
-        user_id (int): The ID of the user to mute
-        duration_minutes (int, optional): The duration of the mute in minutes. If None, the mute will be indefinite. Defaults to None
 
-    Returns:
-        None
-    """
-    await enforcement_dto.mute_user_dto(user_id, duration_minutes)
+async def mute_user_service(
+    user_id: int,
+    duration_minutes: Optional[int] = None,
+    reason: str = "No reason provided",
+):
+    member = await fetch_member(user_id)
+    duration = (
+        datetime.timedelta(minutes=duration_minutes) if duration_minutes else None
+    )
+    await member.edit(mute=True, reason=reason, timeout=duration)
 
 
-async def unmute_user_service(user_id: int):
-    """
-    Unmute a user in the server, allowing them to send messages and speak in voice channels again.
-
-    Args:
-        user_id (int): The ID of the user to unmute
-
-    Returns:
-        None
-    """
-    await enforcement_dto.unmute_user_dto(user_id)
+async def unmute_user_service(user_id: int, reason: str = "No reason provided"):
+    member = await fetch_member(user_id)
+    await member.edit(mute=False, reason=reason)
 
 
 async def kick_user_service(user_id: int, reason: Optional[str] = None):
-    """
-    Kick a user from the server, removing them from the server but allowing them to rejoin.
-
-    Args:
-        user_id (int): The ID of the user to kick
-        reason (str, optional): The reason for kicking the user. Defaults to None
-
-    Returns:
-        None
-    """
-    await enforcement_dto.kick_user_dto(user_id, reason)
+    member = await fetch_member(user_id)
+    await member.kick(reason=reason)
 
 
 async def ban_user_service(user_id: int, reason: Optional[str] = None):
-    """
-    Ban a user from the server, preventing them from rejoining.
-
-    Args:
-        user_id (int): The ID of the user to ban
-        reason (str, optional): The reason for banning the user. Defaults to None
-
-    Returns:
-        None
-    """
-    await enforcement_dto.ban_user_dto(user_id, reason)
+    member = await fetch_member(user_id)
+    await member.ban(reason=reason)
 
 
 async def unban_user_service(user_id: int):
-    """
-    Unban a user from the server, allowing them to rejoin.
-
-    Args:
-        user_id (int): The ID of the user to unban
-
-    Returns:
-        None
-    """
-    await enforcement_dto.unban_user_dto(user_id)
+    guild = _client.get_guild(_client.target_guild_id)
+    if not guild:
+        raise GuildNotFoundError("Target guild not found or bot is not in it.")
+    try:
+        user = await _client.fetch_user(user_id)
+        await guild.unban(user)
+    except discord.NotFound:
+        raise MemberNotFoundError(f"User with ID {user_id} not found.")
 
 
 async def move_user_service(user_id: int, target_channel_id: int):
-    """
-    Move a user to a different voice channel.
-
-    Args:
-        user_id (int): The ID of the user to move
-        target_channel_id (int): The ID of the target voice channel to move the user to
-
-    Returns:
-        None
-    """
-    await enforcement_dto.move_user_dto(user_id, target_channel_id)
+    member = await fetch_member(user_id)
+    channel = _client.get_channel(target_channel_id)
+    if (
+        not channel
+        or not isinstance(channel, discord.abc.GuildChannel)
+        or getattr(channel.guild, "id", None) != _client.target_guild_id
+    ):
+        raise ChannelNotFoundError(
+            f"Channel with ID {target_channel_id} not found in target guild."
+        )
+    await member.move_to(channel)
 
 
 async def disconnect_user_service(user_id: int):
-    """
-    Disconnect a user from their current voice channel.
-
-    Args:
-        user_id (int): The ID of the user to disconnect
-
-    Returns:
-        None
-    """
-    await enforcement_dto.disconnect_user_dto(user_id)
+    member = await fetch_member(user_id)
+    await member.move_to(None)

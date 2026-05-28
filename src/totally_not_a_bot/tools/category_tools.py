@@ -14,7 +14,7 @@ async def get_all_categories_info() -> list[Channel]:
     Returns:
         list[Channel]: A list of Channel objects representing categories
     """
-    return await category_services.get_all_categories_info()
+    return await category_services.get_all_categories_info_service()
 
 
 async def create_category(

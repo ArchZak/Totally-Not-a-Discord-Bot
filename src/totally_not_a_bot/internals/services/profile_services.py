@@ -1,6 +1,7 @@
 from typing import Literal
 
-import totally_not_a_bot.internals.dto.profiles_dto as profiles_dto
+import discord
+from totally_not_a_bot.config.app import _client
 
 # region Profile Tools
 
@@ -15,7 +16,7 @@ async def set_bot_status_service(status: str):
     Returns:
         None
     """
-    await profiles_dto.set_bot_status_dto(status)
+    await _client.change_presence(status=status)
 
 
 async def set_bot_activity_service(
@@ -32,7 +33,8 @@ async def set_bot_activity_service(
     Returns:
         None
     """
-    await profiles_dto.set_bot_activity_dto(activity_type, activity_name)
+    activity = discord.Activity(name=activity_name, type=getattr(discord.ActivityType, activity_type, discord.ActivityType.playing))
+    await _client.change_presence(activity=activity)
 
 
 # endregion
