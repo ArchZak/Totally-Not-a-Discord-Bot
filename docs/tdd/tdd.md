@@ -239,6 +239,8 @@ Look into the error handling of stuff / stuff fails gracefully if resources come
 
 Test suite to benchmark tool call speeds? idk
 
+should i be returning success status or does fastmcp auto do that?
+
 
 ## Testing Plan
 

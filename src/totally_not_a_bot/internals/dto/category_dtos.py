@@ -49,9 +49,11 @@ async def create_category(
             if role:
                 overwrites[role] = discord.PermissionOverwrite(view_channel=True)
 
-    await guild.create_category(
+    category_made =  await guild.create_category(
         name=name, overwrites=overwrites if overwrites else None
     )
+
+    return category_made.id
 
 
 async def edit_category(

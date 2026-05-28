@@ -31,7 +31,27 @@ async def create_category_service(
     Returns:
         None
     """
-    await category_dtos.create_category(name, is_private, allowed_role_ids)
+    return await category_dtos.create_category(name, is_private, allowed_role_ids)
+
+
+async def create_category_with_channels_service(
+    name: str,
+    channels: list[dict],
+    is_private: bool = False,
+    allowed_role_ids: list[int] | None = None,
+):
+    """
+    Create a new category in the server along with specified channels within it.
+
+    Args:
+        name (str): The name of the new category
+        channels (list[dict]): A list of dictionaries representing channels to create within the category, each with a 'name' and 'type' (e.g., 'text', 'voice', 'forum')
+        is_private (bool): Whether the category should be hidden from @everyone
+        allowed_role_ids (list[int] | None): A list of role IDs allowed to view this category
+
+    Returns:
+        None
+    """
 
 
 async def edit_category_service(

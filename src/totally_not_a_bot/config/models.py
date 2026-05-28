@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional, TypedDict
 
 from pydantic import BaseModel
 
@@ -27,6 +27,13 @@ class Channel(BaseModel):
     channel_id: int
     channel_description: Optional[str] = None
     channel_type: str
+
+
+class ChannelParam(TypedDict, total=False):
+    name: str
+    channel_type: Literal["text", "voice", "forum"]
+    is_private: bool
+    allowed_role_ids: list[int] | None
 
 
 class Category(BaseModel):

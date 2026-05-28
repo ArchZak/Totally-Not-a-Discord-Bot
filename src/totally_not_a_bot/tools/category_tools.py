@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from totally_not_a_bot.config.models import Channel
+from totally_not_a_bot.config.models import Channel, ChannelParam
 from totally_not_a_bot.internals.services import category_services
 
 
@@ -25,7 +25,7 @@ async def create_category(
     allowed_role_ids: Annotated[
         list[int] | None, "A list of role IDs allowed to view this category"
     ] = None,
-):
+) -> int:
     """
     Create a new category in the server.
 
@@ -35,11 +35,38 @@ async def create_category(
         allowed_role_ids (list[int] | None): A list of role IDs allowed to view this category
 
     Returns:
-        None
+        category_id (int): The id of the category that was made
     """
     return await category_services.create_category_service(
         name, is_private, allowed_role_ids
     )
+
+
+async def create_category_with_channels(
+    name: Annotated[str, "The name of the new category"],
+    channels: Annotated[
+        list[ChannelParam],
+        "A list of dictionaries representing channels to create within the category, each with a 'name' and 'type' (e.g., 'text', 'voice', 'forum')",
+    ],
+    is_private: Annotated[
+        bool, "Whether the category should be hidden from @everyone"
+    ] = False,
+    allowed_role_ids: Annotated[
+        list[int] | None, "A list of role IDs allowed to view this category"
+    ] = None,
+):
+    """
+    Create a new category in the server along with specified channels within it.
+
+    Args:
+        name (str): The name of the new category
+        channels (list[dict]): A list of dictionaries representing channels to create within the category, each with a 'name' and 'type' (e.g., 'text', 'voice', 'forum')
+        is_private (bool): Whether the category should be hidden from @everyone
+        allowed_role_ids (list[int] | None): A list of role IDs allowed to view this category
+
+    Returns:
+        None
+    """
 
 
 async def edit_category(
