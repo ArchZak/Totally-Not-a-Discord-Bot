@@ -1,17 +1,20 @@
 from typing import Optional
 
+import totally_not_a_bot.internals.dto.enforcement_dtos as enforcement_dto
 
-async def mute_user_service(user_id: int, duration_seconds: Optional[int] = None):
+
+async def mute_user_service(user_id: int, duration_minutes: Optional[int] = None):
     """
     Mute a user in the server, preventing them from sending messages or speaking in voice channels.
 
     Args:
         user_id (int): The ID of the user to mute
-        duration_seconds (int, optional): The duration of the mute in seconds. If None, the mute will be indefinite. Defaults to None
+        duration_minutes (int, optional): The duration of the mute in minutes. If None, the mute will be indefinite. Defaults to None
 
     Returns:
         None
     """
+    await enforcement_dto.mute_user_dto(user_id, duration_minutes)
 
 
 async def unmute_user_service(user_id: int):
@@ -24,6 +27,7 @@ async def unmute_user_service(user_id: int):
     Returns:
         None
     """
+    await enforcement_dto.unmute_user_dto(user_id)
 
 
 async def kick_user_service(user_id: int, reason: Optional[str] = None):
@@ -37,6 +41,7 @@ async def kick_user_service(user_id: int, reason: Optional[str] = None):
     Returns:
         None
     """
+    await enforcement_dto.kick_user_dto(user_id, reason)
 
 
 async def ban_user_service(user_id: int, reason: Optional[str] = None):
@@ -50,6 +55,7 @@ async def ban_user_service(user_id: int, reason: Optional[str] = None):
     Returns:
         None
     """
+    await enforcement_dto.ban_user_dto(user_id, reason)
 
 
 async def unban_user_service(user_id: int):
@@ -62,6 +68,7 @@ async def unban_user_service(user_id: int):
     Returns:
         None
     """
+    await enforcement_dto.unban_user_dto(user_id)
 
 
 async def move_user_service(user_id: int, target_channel_id: int):
@@ -75,6 +82,7 @@ async def move_user_service(user_id: int, target_channel_id: int):
     Returns:
         None
     """
+    await enforcement_dto.move_user_dto(user_id, target_channel_id)
 
 
 async def disconnect_user_service(user_id: int):
@@ -87,3 +95,4 @@ async def disconnect_user_service(user_id: int):
     Returns:
         None
     """
+    await enforcement_dto.disconnect_user_dto(user_id)

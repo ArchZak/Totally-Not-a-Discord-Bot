@@ -22,6 +22,15 @@ from totally_not_a_bot.tools.channels_tools import (
     move_channel,
     set_channel_position,
 )
+from totally_not_a_bot.tools.enforcement_tools import (
+    ban_user,
+    disconnect_user,
+    kick_user,
+    move_user,
+    mute_user,
+    unban_user,
+    unmute_user,
+)
 from totally_not_a_bot.tools.messages_tools import (
     add_reaction,
     delete_message,
@@ -105,6 +114,16 @@ mcp.add_tool(delete_role)
 mcp.add_tool(get_user_info)
 mcp.add_tool(send_direct_message)
 mcp.add_tool(send_direct_message_with_embed)
+
+# Enforcement tools
+
+mcp.add_tool(mute_user)
+mcp.add_tool(unmute_user)
+mcp.add_tool(kick_user)
+mcp.add_tool(ban_user)
+mcp.add_tool(unban_user)
+mcp.add_tool(move_user)
+mcp.add_tool(disconnect_user)
 
 # Redirect loguru to stderr to avoid breaking MCP stdio transport
 logger.remove()
