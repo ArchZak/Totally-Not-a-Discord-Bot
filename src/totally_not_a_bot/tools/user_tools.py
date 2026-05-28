@@ -1,8 +1,12 @@
+from typing import Annotated
+
 from totally_not_a_bot.config.models import Embed
 from totally_not_a_bot.internals.services import users_services
 
 
-async def get_user_info(user_id: int):
+async def get_user_info(
+    user_id: Annotated[int, "The ID of the user to fetch information from"],
+):
     """
     Get information about a user in the server, such as their username, roles, and join date.
 
@@ -15,7 +19,10 @@ async def get_user_info(user_id: int):
     return await users_services.get_user_info_service(user_id)
 
 
-async def send_direct_message(user_id: int, content: str):
+async def send_direct_message(
+    user_id: Annotated[int, "The ID of the user to send the message to"],
+    content: Annotated[str, "The content of the message to send"],
+):
     """
     Send a direct message to a user.
 
@@ -29,7 +36,11 @@ async def send_direct_message(user_id: int, content: str):
     return await users_services.send_direct_message_service(user_id, content)
 
 
-async def send_direct_message_with_embed(user_id: int, content: str, embed: Embed):
+async def send_direct_message_with_embed(
+    user_id: Annotated[int, "The ID of the user to send the message to"],
+    content: Annotated[str, "The content of the message to send"],
+    embed: Annotated[Embed, "The embed to include in the message"],
+):
     """
     Send a direct message with an embed to a user.
 

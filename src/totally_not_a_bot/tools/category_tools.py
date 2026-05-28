@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from totally_not_a_bot.config.models import Channel
 from totally_not_a_bot.internals.services import category_services
 
@@ -16,7 +18,9 @@ async def get_all_categories_info() -> list[Channel]:
 
 
 async def create_category(
-    name: str, is_private: bool = False, allowed_role_ids: list[int] | None = None
+    name: Annotated[str, "The name of the new category"],
+    is_private: Annotated[bool, "Whether the category should be hidden from @everyone"] = False,
+    allowed_role_ids: Annotated[list[int] | None, "A list of role IDs allowed to view this category"] = None
 ):
     """
     Create a new category in the server.
@@ -35,10 +39,10 @@ async def create_category(
 
 
 async def edit_category(
-    category_id: int,
-    new_name: str | None = None,
-    is_private: bool | None = None,
-    allowed_role_ids: list[int] | None = None,
+    category_id: Annotated[int, "The ID of the category to edit"],
+    new_name: Annotated[str | None, "The new name for the category"] = None,
+    is_private: Annotated[bool | None, "Whether the category should be hidden from @everyone"] = None,
+    allowed_role_ids: Annotated[list[int] | None, "A list of role IDs allowed to view this category"] = None,
 ):
     """
     Edit the name or permissions of a category in the server.
@@ -57,7 +61,7 @@ async def edit_category(
     )
 
 
-async def delete_category(category_id: int):
+async def delete_category(category_id: Annotated[int, "The ID of the category to delete"]):
     """
     Delete a category from the server.
 
@@ -70,7 +74,10 @@ async def delete_category(category_id: int):
     return await category_services.delete_category_service(category_id)
 
 
-async def move_category(category_id: int, new_position: int):
+async def move_category(
+    category_id: Annotated[int, "The ID of the category to move"],
+    new_position: Annotated[int, "The new position for the category (0-based index)"]
+):
     """
     Move a category to a new position in the server.
 

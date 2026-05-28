@@ -1,4 +1,4 @@
-from typing import Annotated, Literal
+from typing import Literal
 
 import totally_not_a_bot.internals.dto.profiles_dto as profiles_dto
 
@@ -19,10 +19,7 @@ async def set_bot_status_service(status: str):
 
 
 async def set_bot_activity_service(
-    activity_type: Annotated[
-        Literal["playing", "streaming", "listening", "watching"],
-        'The type of activity (e.g., "playing", "streaming", "listening", "watching")',
-    ],
+    activity_type: Literal["playing", "streaming", "listening", "watching"],
     activity_name: str,
 ):
     """

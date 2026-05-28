@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Annotated, Optional
+from typing import Optional
 
 import discord
 
@@ -14,7 +14,7 @@ from totally_not_a_bot.config.models import Embed, Message
 async def get_recent_messages_service(
     channel_id: int,
     limit: int = 20,
-    timestamp: Annotated[Optional[datetime], "Filter messages newer than this"] = None,
+    timestamp: Optional[datetime] = None,
 ) -> list[Message]:
     """
     Fetch recent messages from a specific channel and filtered by a given timestamp, or default to the last 30 minutes worth of messages that fit the limit.

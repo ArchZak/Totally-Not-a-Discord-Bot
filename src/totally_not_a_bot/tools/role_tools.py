@@ -1,3 +1,5 @@
+from typing_extensions import Annotated
+
 from totally_not_a_bot.config.models import Role
 from totally_not_a_bot.internals.services import roles_services
 
@@ -15,7 +17,9 @@ async def get_all_roles() -> list[Role]:
     return await roles_services.get_all_roles_service()
 
 
-async def get_role_by_id(role_id: int) -> Role | None:
+async def get_role_by_id(
+    role_id: Annotated[int, "The ID of the role to fetch information from"],
+) -> Role | None:
     """
     Get the information about a role after passing in its id.
 
@@ -28,7 +32,10 @@ async def get_role_by_id(role_id: int) -> Role | None:
     return await roles_services.get_role_by_id_service(role_id)
 
 
-async def assign_role_to_user(user_id: int, role_id: int):
+async def assign_role_to_user(
+    user_id: Annotated[int, "The ID of the user to assign the role to"],
+    role_id: Annotated[int, "The ID of the role to assign the user"],
+) -> None:
     """
     Assign a role to a user.
 
@@ -42,13 +49,16 @@ async def assign_role_to_user(user_id: int, role_id: int):
     return await roles_services.assign_role_to_user_service(user_id, role_id)
 
 
-async def remove_role_from_user(user_id: int, role_id: int):
+async def remove_role_from_user(
+    user_id: Annotated[int, "The ID of the user to remove the role from"],
+    role_id: Annotated[int, "The ID of the role to remove from the user"],
+) -> None:
     """
     Remove a role from a user.
 
     Args:
-        user_id (int): The ID of the user to Remove the role to
-        role_id (int): The ID of the role to Remove the user
+        user_id (int): The ID of the user to remove the role from
+        role_id (int): The ID of the role to remove from the user
 
     Returns:
         None
@@ -57,7 +67,9 @@ async def remove_role_from_user(user_id: int, role_id: int):
 
 
 async def create_role(
-    name: str, permissions: int | None = None, color: int | None = None
+    name: Annotated[str, "The name of the role to create"],
+    permissions: Annotated[int | None, "The permissions to assign to the role, represented as a bitwise integer. If None, the role will have no permissions"] = None,
+    color: Annotated[int | None, "The color to assign to the role, represented as an integer. If None, the role will have no color"] = None,
 ):
     """
     Create a new role for the server.
@@ -74,10 +86,10 @@ async def create_role(
 
 
 async def edit_role(
-    role_id: int,
-    name: str | None = None,
-    permissions: int | None = None,
-    color: int | None = None,
+    role_id: Annotated[int, "The ID of the role to edit"],
+    name: Annotated[str | None, "The new name of the role. If None, the role's name will not be changed."] = None,
+    permissions: Annotated[int | None, "The new permissions to assign to the role, represented as a bitwise integer. If None, the role's permissions will not be changed."] = None,
+    color: Annotated[int | None, "The new color to assign to the role, represented as an integer. If None, the role's color will not be changed."] = None,
 ):
     """
     Edit an existing role for the server.
@@ -94,7 +106,7 @@ async def edit_role(
     return await roles_services.edit_role_service(role_id, name, permissions, color)
 
 
-async def delete_role(role_id: int):
+async def delete_role(role_id: Annotated[int, "The ID of the role to delete"]):
     """
     Delete a new role for the server.
 

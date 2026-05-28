@@ -1,4 +1,4 @@
-from typing import Annotated, Literal, Optional
+from typing import Literal, Optional
 
 import totally_not_a_bot.internals.dto.channels_dto as channels_dto
 from totally_not_a_bot.config.models import Channel
@@ -34,10 +34,7 @@ async def get_all_channels_info_service() -> list[Channel]:
 
 async def create_channel_service(
     name: str,
-    channel_type: Annotated[
-        Literal["text", "voice", "forum"],
-        "The type of channel to create (e.g., 'text', 'voice', 'forum')",
-    ],
+    channel_type: Literal["text", "voice", "forum"],
     parent_id: Optional[int] = None,
     is_private: bool = False,
     allowed_role_ids: Optional[list[int]] = None,
