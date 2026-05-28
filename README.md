@@ -1,11 +1,14 @@
 # Totally-not-a-Bot
 
-Totally-not-a-Bot is an MCP to allow agentic AI to interact in discord servers as another enforcement layer. 
+Totally-not-a-Bot is an MCP for agentic AIs to interact in discord servers with a particular focus on moderation and security. 
 
-This project was a great way for me to become familiar with how developing MCPs could go, and I was able to struggle and gripe with a lot of architectural, testing, and logic decisions. Overall, I walked away with a lot of mental models that will make future development of other MCPs go by a lot faster and more efficiently. 
+I started this project because I wanted to become familiar with developing MCPs. I was able to struggle with certain architectural choices, logic, and other decisions that influenced the whole project. I was able to build many mental models about MCPs and agentic AI, and if I ever have to develop another MCP in the future, it'll go by way faster, and be a much more efficient process. 
 
-README will be finished once the project reaches a solid enough state, and could be reasonably used. Still need to implement the enforcement tools, create memory layers to combine tool calls / make bulk actions, test suite needs to be made using pytest and pytest-asyncio, and put in more CI workflows. 
+README will be finished once the project reaches a solid enough state, and could be reasonably used. Still need to implement the enforcement tools, create memory layers to combine tool calls / make bulk actions, test suite needs to be made using pytest and pytest-asyncio, containerization, and put in more CI workflows. 
 
-Future README will feature highlights + an overview of the project(what it is, why I made it), getting started with dev (spinning up the server for local dev, command lines, env things) and other stuff as I think of them(like future iterations + other contributions that can be made since you can literally do whatever with discord bots). 
+## Project Map
 
-Should probably also make a docker container for all this. 
+## Quick Start
+
+## Current Tools
+

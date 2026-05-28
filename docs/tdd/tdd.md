@@ -7,6 +7,8 @@
 
 Totally not a bot is going to be an MCP to allow agentic AIs to serve as smart enforcement for discord servers alongside server staff
 
+Note that this TDD is not aligned with the current design philosphies of the project, and that I didn't know some things then. A lot of the learning was done via trial by fire. 
+
 ## Problem
 
 ### Goals
@@ -56,7 +58,7 @@ tnb_mcp_server/
 
 ### MCP Design
 
-### Message Resources
+### Message Tools
 
 tnb/messages/recent - fetch recent messages (default 20)  
   params: channel_id, limit?, since?, before?
@@ -74,8 +76,6 @@ tnb/messages/thread - fetch replies / thread for a message
 tnb/messages/activity - aggregate stats (message count, top users, frequency)  
   params: channel_id, since?
 
-### Message Tools 
-
 tnb/messages/send - send text message (optional reply_to)  
 
 tnb/messages/edit - edit existing message  
@@ -91,7 +91,7 @@ tnb/messages/unreact - remove own reaction
 tnb/messages/bulk_delete - delete multiple messages at once  
   params: channel_id, message_ids? | count?
 
-### Channel Resources
+### Channel Tools
 
 tnb/channels/list - fetch all channels + descriptions + ids in server
 
@@ -103,8 +103,6 @@ tnb/channels/activity - channel activity stats to detect usage
 tnb/channels/dead - detect inactive channels  
   params: threshold_days
 
-### Channel Tools
-
 tnb/channels/create - create channel  
   params: name, type (text/voice/forum), category_id?
 
@@ -114,11 +112,9 @@ tnb/channels/delete - delete channel
 
 tnb/channels/move - move channel to another category
 
-### Category Resources
+### Category Tools
 
 tnb/categories/list - fetch all categories and their channels
-
-### Category Tools
 
 tnb/categories/create - create category  
 
@@ -132,7 +128,7 @@ tnb/profile/status - set status
 
 tnb/profile/about - set about me
 
-### User Resources
+### User Tools
 
 tnb/users/id - resolve user id  
 
@@ -143,19 +139,15 @@ tnb/users/activity - message activity stats
 
 tnb/users/infractions - past moderation actions on user
 
-### User Tools
-
 tnb/users/dm - send direct message  
 
 tnb/users/rename - change user nickname
 
-### Role Resources
+### Role Tools
 
 tnb/roles/list - get all roles + info
 
 tnb/roles/by_id - fetch role details by id
-
-### Role Tools
 
 tnb/roles/assign - assign role to user  
 
@@ -234,17 +226,14 @@ tnb/server/invites - active invite links
 
 ## Blockers
 
-1-1 where LLM controls one bot or 1-many where it controls many bots. So instatinate bots and store them in memory or something.
-Error handling at the handler level
-
 TODO: schedule events, channel override\
 What prompts should I add?\
-
-Add local vector database for memory across sessions? is that an agent responsibility?
 
 List bulk actions that should exist in the memory layer
 
 Go through docs and do thorough checks of what each type of service is missing, such as attaching files to messages, or adding fields to embeds
+
+Sanitize outputs
 
 Look into the error handling of stuff / stuff fails gracefully if resources come up empty or cant be found
 
