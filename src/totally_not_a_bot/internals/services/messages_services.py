@@ -4,7 +4,6 @@ from typing import Optional
 import discord
 
 import totally_not_a_bot.internals.dto.channels_dto as channels_dto
-import totally_not_a_bot.internals.dto.users_dtos as users_dto
 from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     ChannelNotFoundError,

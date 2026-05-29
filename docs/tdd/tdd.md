@@ -226,21 +226,6 @@ tnb/server/invites - active invite links
 
 ## Blockers
 
-TODO: schedule events, channel override\
-What prompts should I add?\
-
-List bulk actions that should exist in the memory layer
-
-Go through docs and do thorough checks of what each type of service is missing, such as attaching files to messages, or adding fields to embeds
-
-Sanitize outputs
-
-Look into the error handling of stuff / stuff fails gracefully if resources come up empty or cant be found
-
-Test suite to benchmark tool call speeds? idk
-
-should i be returning success status or does fastmcp auto do that?
-
 
 ## Testing Plan
 
