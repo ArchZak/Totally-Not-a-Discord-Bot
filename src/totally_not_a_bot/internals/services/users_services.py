@@ -2,7 +2,7 @@ from typing import Optional
 
 import discord
 
-import totally_not_a_bot.internals.dto.users_dtos as users_dtos
+import totally_not_a_bot.internals.dto.users_dto as users_dto
 from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import GuildNotFoundError, MemberNotFoundError
 from totally_not_a_bot.config.models import User
@@ -21,12 +21,12 @@ async def get_user_info_service(user_id: int) -> Optional[User]:
             pass
 
     if member:
-        return users_dtos._convert_user(member)
+        return users_dto._convert_user(member)
 
     # Fallback to user if not in guild
     try:
         user = await _client.fetch_user(user_id)
-        return users_dtos._convert_user(user)
+        return users_dto._convert_user(user)
     except discord.NotFound:
         raise MemberNotFoundError(f"User with ID {user_id} not found.")
 

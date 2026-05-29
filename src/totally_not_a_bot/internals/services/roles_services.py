@@ -1,6 +1,6 @@
 import discord
 
-import totally_not_a_bot.internals.dto.roles_dtos as roles_dto
+import totally_not_a_bot.internals.dto.roles_dto as roles_dto
 from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     GuildNotFoundError,

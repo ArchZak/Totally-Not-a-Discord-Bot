@@ -1,6 +1,6 @@
 import discord
 
-import totally_not_a_bot.internals.dto.category_dtos as category_dtos
+import totally_not_a_bot.internals.dto.category_dto as category_dto
 import totally_not_a_bot.internals.services.channels_services as channels_services
 from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
@@ -24,7 +24,7 @@ async def get_category_info(category_id: int) -> Category:
             "Category with the specified ID not found in the target guild."
         )
 
-    return category_dtos._convert_category(category)
+    return category_dto._convert_category(category)
 
 
 async def get_all_categories_info_service() -> list[Category]:
@@ -33,7 +33,7 @@ async def get_all_categories_info_service() -> list[Category]:
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
 
-    return [category_dtos._convert_category(c) for c in guild.categories]
+    return [category_dto._convert_category(c) for c in guild.categories]
 
 
 async def create_category_service(
