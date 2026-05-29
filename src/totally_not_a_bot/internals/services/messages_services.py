@@ -8,7 +8,6 @@ import totally_not_a_bot.internals.dto.users_dtos as users_dto
 from totally_not_a_bot.config.app import _client
 from totally_not_a_bot.config.exceptions import (
     ChannelNotFoundError,
-    GuildNotFoundError,
     MessageNotFoundError,
     MessageOwnershipError,
 )

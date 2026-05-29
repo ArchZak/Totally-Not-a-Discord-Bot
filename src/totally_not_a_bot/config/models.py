@@ -72,3 +72,12 @@ class Member(BaseModel):
     nickname: Optional[str] = None
     roles: list[int]
     date_joined: Optional[datetime] = None
+
+
+class User(BaseModel):
+    user_id: int
+    username: str
+    discriminator: str
+    is_bot: bool
+    # TODO complete member details to be accurate
+    member_details: Optional[Member] = None

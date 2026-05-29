@@ -3,7 +3,6 @@ from typing import Annotated
 from totally_not_a_bot.config.models import (
     Category,
     CategoryParam,
-    Channel,
     ChannelParam,
 )
 from totally_not_a_bot.internals.services import category_services
