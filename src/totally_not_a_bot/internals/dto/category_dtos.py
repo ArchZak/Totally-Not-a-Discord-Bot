@@ -15,7 +15,9 @@ def _convert_category(category: discord.CategoryChannel) -> Category:
             Channel(
                 name=channel.name,
                 channel_id=channel.id,
-                channel_description=channel.topic if isinstance(channel, discord.TextChannel) else None,
+                channel_description=channel.topic
+                if isinstance(channel, discord.TextChannel)
+                else None,
                 channel_type=(
                     "text"
                     if isinstance(channel, discord.TextChannel)
@@ -27,5 +29,5 @@ def _convert_category(category: discord.CategoryChannel) -> Category:
                 ),
             )
             for channel in category.channels
-        ]
+        ],
     )

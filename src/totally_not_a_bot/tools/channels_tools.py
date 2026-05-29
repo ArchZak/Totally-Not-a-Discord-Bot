@@ -1,6 +1,6 @@
 from typing import Annotated, Literal, Optional
 
-from totally_not_a_bot.config.models import Channel
+from totally_not_a_bot.config.models import Channel, ChannelEditParam, ChannelParam
 from totally_not_a_bot.internals.services import channels_services
 
 
@@ -66,6 +66,63 @@ async def create_channel(
     )
 
 
+async def bulk_create_channels(
+    channels: Annotated[
+        list[ChannelParam],
+        "A list of dictionaries, each containing the parameters for a channel to create",
+    ],
+    parent_id: Annotated[
+        Optional[int], "The ID of the parent category for the channels, if applicable"
+    ] = None,
+) -> list[int]:
+    """
+    Create multiple channels in the server at once based on a list of channel parameters.
+
+    Args:
+        channels (list[ChannelParam]): A list of dictionaries, each containing the parameters for a channel to create (e.g., name, type, privacy settings)
+        parent_id (Optional[int]): The ID of the parent category for the channels, if applicable
+
+    Returns:
+        list[int]: A list of IDs for the newly created channels
+    """
+    created_channel_ids = []
+    for channel in channels:
+        channel_id = await create_channel(
+            name=channel.name,
+            channel_type=channel.channel_type,
+            parent_id=parent_id,
+            is_private=channel.is_private,
+            allowed_role_ids=channel.allowed_role_ids,
+        )
+        created_channel_ids.append(channel_id)
+    return created_channel_ids
+
+
+async def bulk_edit_channels(
+    channels: Annotated[
+        list[ChannelEditParam],
+        "A list of channel edit instructions, each containing a channel_id and any fields to update",
+    ],
+) -> None:
+    """
+    Edit multiple channels in the server.
+
+    Args:
+        channels (list[ChannelEditParam]): A list of channel edit instructions, each containing a channel_id and any fields to update
+
+    Returns:
+        None
+    """
+    for channel in channels:
+        await edit_channel(
+            channel_id=channel["channel_id"],
+            new_name=channel.get("new_name"),
+            new_parent_id=channel.get("new_parent_id"),
+            is_private=channel.get("is_private"),
+            allowed_role_ids=channel.get("allowed_role_ids"),
+        )
+
+
 async def edit_channel(
     channel_id: Annotated[int, "The ID of the channel to edit"],
     new_name: Annotated[
@@ -112,6 +169,22 @@ async def delete_channel(channel_id: Annotated[int, "The ID of the channel to de
         None
     """
     return await channels_services.delete_channel_service(channel_id)
+
+
+async def bulk_delete_channels(
+    channel_ids: Annotated[list[int], "A list of channel IDs to delete"],
+) -> None:
+    """
+    Delete multiple channels from the server.
+
+    Args:
+        channel_ids (list[int]): A list of channel IDs to delete
+
+    Returns:
+        None
+    """
+    for channel_id in channel_ids:
+        await delete_channel(channel_id)
 
 
 async def move_channel(

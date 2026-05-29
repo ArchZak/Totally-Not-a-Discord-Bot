@@ -150,7 +150,7 @@ async def bulk_edit_categories(
         list[Category],
         "A list of Category objects representing categories to edit, each with an 'id' and optional 'name', 'is_private' boolean, and 'allowed_role_ids' list",
     ],
-):
+) -> None:
     """
     Edit the name or permissions of multiple categories in the server.
 
@@ -158,7 +158,7 @@ async def bulk_edit_categories(
         categories (list[Category]): A list of Category objects representing categories to edit, each with an 'id' and optional 'name', 'is_private' boolean, and 'allowed_role_ids' list
 
     Returns:
-        list[int]: A list of IDs for the categories that were edited
+        None
     """
     for category in categories:
         await category_services.edit_category_service(
@@ -186,7 +186,7 @@ async def delete_category(
 
 async def bulk_delete_categories(
     category_ids: Annotated[list[int], "A list of IDs for the categories to delete"],
-):
+) -> None:
     """
     Delete multiple categories from the server.
 
@@ -194,7 +194,7 @@ async def bulk_delete_categories(
         category_ids (list[int]): A list of IDs for the categories to delete
 
     Returns:
-        list[int]: A list of IDs for the categories that were deleted
+        None
     """
     for category_id in category_ids:
         await category_services.delete_category_service(category_id)

@@ -7,6 +7,9 @@ from loguru import logger
 
 from totally_not_a_bot.config.app import _client, mcp
 from totally_not_a_bot.tools.category_tools import (
+    bulk_create_categories,
+    bulk_delete_categories,
+    bulk_edit_categories,
     create_category,
     delete_category,
     edit_category,
@@ -14,6 +17,9 @@ from totally_not_a_bot.tools.category_tools import (
     move_category,
 )
 from totally_not_a_bot.tools.channels_tools import (
+    bulk_create_channels,
+    bulk_delete_channels,
+    bulk_edit_channels,
     create_channel,
     delete_channel,
     edit_channel,
@@ -64,6 +70,9 @@ from totally_not_a_bot.tools.user_tools import (
 # Category tools
 
 mcp.add_tool(get_all_categories_info)
+mcp.add_tool(bulk_create_categories)
+mcp.add_tool(bulk_edit_categories)
+mcp.add_tool(bulk_delete_categories)
 mcp.add_tool(create_category)
 mcp.add_tool(edit_category)
 mcp.add_tool(delete_category)
@@ -73,6 +82,9 @@ mcp.add_tool(move_category)
 
 mcp.add_tool(get_channel_info)
 mcp.add_tool(get_all_channels_info)
+mcp.add_tool(bulk_create_channels)
+mcp.add_tool(bulk_edit_channels)
+mcp.add_tool(bulk_delete_channels)
 mcp.add_tool(create_channel)
 mcp.add_tool(edit_channel)
 mcp.add_tool(delete_channel)

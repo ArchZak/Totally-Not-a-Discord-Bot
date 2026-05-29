@@ -75,6 +75,7 @@ async def create_category_with_channels_service(
             channel_type=channel.channel_type,
             parent_id=category_id,
             is_private=is_private,
+            allowed_role_ids=allowed_role_ids,
         )
 
     return category_id

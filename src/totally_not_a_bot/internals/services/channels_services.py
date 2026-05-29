@@ -14,6 +14,41 @@ from totally_not_a_bot.config.models import Channel
 # region Channel Tools
 
 
+def _get_category_or_raise(
+    guild: discord.Guild, category_id: int
+) -> discord.CategoryChannel:
+    category = guild.get_channel(category_id)
+    if (
+        not category
+        or not isinstance(category, discord.CategoryChannel)
+        or getattr(category.guild, "id", None) != _client.target_guild_id
+    ):
+        raise CategoryNotFoundError(
+            "Category with the specified ID not found in the target guild."
+        )
+    return category
+
+
+def _build_channel_overwrites(
+    guild: discord.Guild,
+    parent_category: discord.CategoryChannel | None,
+    is_private: bool,
+    allowed_role_ids: Optional[list[int]],
+) -> dict:
+    overwrites = dict(parent_category.overwrites) if parent_category else {}
+
+    if is_private:
+        overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
+
+    if allowed_role_ids:
+        for role_id in allowed_role_ids:
+            role = guild.get_role(role_id)
+            if role:
+                overwrites[role] = discord.PermissionOverwrite(view_channel=True)
+
+    return overwrites
+
+
 async def get_channel_info_service(channel_id: int) -> Optional[Channel]:
     channel = _client.get_channel(channel_id)
     if (
@@ -45,17 +80,10 @@ async def create_channel_service(
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
 
-    category = guild.get_channel(parent_id) if parent_id else None
-
-    overwrites = {}
-    if is_private:
-        overwrites[guild.default_role] = discord.PermissionOverwrite(view_channel=False)
-
-    if allowed_role_ids:
-        for role_id in allowed_role_ids:
-            role = guild.get_role(role_id)
-            if role:
-                overwrites[role] = discord.PermissionOverwrite(view_channel=True)
+    category = _get_category_or_raise(guild, parent_id) if parent_id else None
+    overwrites = _build_channel_overwrites(
+        guild, category, is_private, allowed_role_ids
+    )
 
     channel_type_lower = str(channel_type).lower()
     if channel_type_lower == "voice":
@@ -95,9 +123,8 @@ async def edit_channel_service(
     if new_name is not None:
         kwargs["name"] = new_name
     if new_parent_id is not None:
-        category = _client.get_channel(new_parent_id)
-        if category and getattr(category.guild, "id", None) == _client.target_guild_id:
-            kwargs["category"] = category
+        category = _get_category_or_raise(channel.guild, new_parent_id)
+        kwargs["category"] = category
 
     if is_private is not None or allowed_role_ids is not None:
         overwrites = channel.overwrites
@@ -149,13 +176,8 @@ async def move_channel_service(channel_id: int, new_parent_id: int):
             "Channel with the specified ID not found in the target guild."
         )
 
-    category = _client.get_channel(new_parent_id)
-    if category and getattr(category.guild, "id", None) == _client.target_guild_id:
-        await channel.edit(category=category)
-    else:
-        raise CategoryNotFoundError(
-            "Category with the specified ID not found in the target guild."
-        )
+    category = _get_category_or_raise(channel.guild, new_parent_id)
+    await channel.edit(category=category)
 
 
 async def set_channel_position_service(channel_id: int, position: int):

@@ -36,6 +36,14 @@ class ChannelParam(TypedDict, total=False):
     allowed_role_ids: list[int] | None
 
 
+class ChannelEditParam(TypedDict, total=False):
+    channel_id: int
+    new_name: str
+    new_parent_id: int
+    is_private: bool
+    allowed_role_ids: list[int] | None
+
+
 class Category(BaseModel):
     name: str
     category_id: int
