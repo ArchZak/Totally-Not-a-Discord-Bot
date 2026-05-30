@@ -1,6 +1,6 @@
-# Totally-not-a-Bot
+# Totally-Not-a-Discord-Bot-MCP
 
-Totally-not-a-Bot is an MCP for agentic AIs to interact in discord servers with a particular focus on moderation and security. 
+Totally-Not-a-Discord-Bot-MCP (Totally-not-a-Bot) is an MCP for agentic AIs to interact in discord servers with a particular focus on moderation and security. 
 
 I started this project because I wanted to become familiar with developing MCPs. I was able to struggle with certain architectural choices, logic, and other decisions that influenced the whole project. I was able to build many mental models about MCPs and agentic AI, and if I ever have to develop another MCP in the future, it'll go by way faster, and be a much more efficient process. 
 
@@ -38,12 +38,12 @@ src/
 To locally run **Totally-not-a-Bot**, ensure you have the following prerequisites installed on your system:
 
 - **Python**: Version `3.12` or higher (configured in `pixi.toml`).
-- **Pixi**: A [modern package manager](https://pixi.prefix.dev/latest/installation/) for robust environmental isolation.
-- **Discord Bot**: A [registered Discord Bot application](https://discord.com/developers/applications) with the necessary Gateway Intents enabled (see the [Quick Start](#getting-a-discord-bot) guide below).
+- **Pixi**: A [modern package manager](https://pixi.prefix.dev/latest/installation/) written in Rust, and it works like cargo.
+- **Discord Bot**: A [Discord Bot](https://discord.com/developers/applications) with the necessary permissions enabled (see the [Quick Start](#getting-a-discord-bot) guide below).
 
 #### Local Repository Setup
 
-1. Set up your environment:
+1. Set up your environment by copying the example file:
    ```bash
    cp .env.example .env
    ```
@@ -68,7 +68,7 @@ You'll need to set up your own Discord application for your MCP to access:
 
 ### Starting the MCP Server
 
-Once your `.env` file has your bot credentials and guild configuration, you can launch both the Discord bot and the stdio MCP server using Pixi for local development:
+Once your `.env` file has your bot token and guild id, you can launch both the Discord bot and the stdio MCP server using Pixi for local development:
 
 ```bash
 pixi run dev
@@ -80,7 +80,7 @@ This launches:
 
 ## Architecture
 
-**Totally-not-a-Bot** utilizes a multi-threaded asynchronous architecture designed to bridge your AI agent to your Discord bot:
+**Totally-not-a-Bot** utilizes a multi-threaded asynchronous architecture designed to connect your AI agent to your Discord bot:
 
 ```mermaid
 graph TD
@@ -91,16 +91,16 @@ graph TD
     E <-->|Discord API| F[Discord Guild]
 ```
 
-- **Asynchronous Execution**: Built on `asyncio`. The Discord client (`discord.Client`) runs in a background task on the event loop while the FastMCP standard I/O loop runs on the main thread, facilitating real-time interactions with zero latency blockages.
+- **Asynchronous Execution**: Built on `asyncio`. The Discord client (`discord.Client`) runs as a background task on the event loop while the FastMCP stdio loop runs on the main thread.
 - **FastMCP Layer**: Implements a declarative tool injection mechanism (`mcp.add_tool`), mapping Python functions directly to model-callable actions.
 - **Modular Components**:
   - **Config Layer ([app.py](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/config/app.py))**: Manages model definitions, exception maps, and initializes the Discord client with `members` and `message_content` intents.
   - **Services Layer ([services](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/internals/services/))**: Business logic executing target operations inside Discord channels.
-  - **Tool Interfaces ([tools](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/tools/))**: Standardized, annotated boundaries parsing and serving model inputs/outputs cleanly.
+  - **Tool Interfaces ([tools](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/tools/))**: Standardized, annotated boundaries parsing and serving model inputs/outputs cleanly and safely.
 
 ## MCP Integration Guide
 
-To connect **Totally-not-a-Bot** to your preferred AI agent client (e.g., Claude Desktop, Cursor, etc.), add the configuration block below to your MCP configuration file.
+To connect **Totally-not-a-Bot** to your preferred AI agent client (e.g., Claude Desktop, Cursor, etc.), add the configuration block below to your MCP configuration file. Although, the best use I could think of for this MCP is to hook it up to an agent that has its own feedback loop. 
 
 #### Claude Desktop Configuration
 Add this to your `claude_desktop_config.json` (located at `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
@@ -123,9 +123,9 @@ Add this to your `claude_desktop_config.json` (located at `~/Library/Application
 }
 ```
 
-Ensure you replace `YOUR_DISCORD_BOT_TOKEN` and `YOUR_DISCORD_BOT_GUILD` with the actual credentials or set them in your active system environment.
+Ensure you replace `YOUR_DISCORD_BOT_TOKEN` and `YOUR_DISCORD_BOT_GUILD` with the actual ids or set them in your active system environment.
 
-## Current Tools
+## Current Tools`
 
 **Totally-not-a-Bot** exposes a wide range of Discord API tools to agentic models, organized by functional category:
 
@@ -236,10 +236,7 @@ We use **Pixi** for dependency management and reproducible development tasks. Th
 
 Please feel free to contribute to **Totally-not-a-Bot**! Since this project is still in active development and was intended as a learning journey, please keep that in mind. I am always open to suggestions, features, improvements, and potential bug fixes.
 
-### Using Templates
-To help keep things organized, please use our templates:
-- **For bugs and improvements**: Submit an issue using our [Bug Report Template](file:///Users/archzak/Desktop/totally-not-a-bot/.github/ISSUE_TEMPLATE/bug_report.md) or [Feature Request Template](file:///Users/archzak/Desktop/totally-not-a-bot/.github/ISSUE_TEMPLATE/feature_request.md).
-- **For code submissions**: When submitting a pull request, please fill out our [Pull Request Template](file:///Users/archzak/Desktop/totally-not-a-bot/.github/pull_request_template.md) to ensure all tests, lint checks, and documentation requirements are met.
+I will add tempates for issues and pull requests whenever I can, but for now I'll just say that I'd like to keep the PRs small and focused on a single change. Also, if you're adding a new MCP tool, please make sure to update the [tools.md](file:///Users/archzak/Desktop/totally-not-a-bot/docs/tools.md) file to include the new tool.
 
 Before submitting any code, please run the formatting task to keep the repository tidy:
 ```bash
