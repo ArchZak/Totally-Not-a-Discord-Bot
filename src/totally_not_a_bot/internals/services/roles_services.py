@@ -22,7 +22,7 @@ async def get_all_roles_service() -> list[Role]:
     Returns:
         list[Role]: A list of Role objects representing the roles in the server
     """
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     return [roles_dto._convert_role(r) for r in guild.roles]
@@ -38,7 +38,7 @@ async def get_role_by_id_service(role_id: int) -> Role | None:
     Returns:
         Role: An object representing the role in the server
     """
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     role = guild.get_role(role_id)
@@ -58,7 +58,7 @@ async def assign_role_to_user_service(user_id: int, role_id: int):
     Returns:
         None
     """
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     member = guild.get_member(user_id)
@@ -83,7 +83,7 @@ async def remove_role_from_user_service(user_id: int, role_id: int):
     Returns:
         None
     """
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     member = guild.get_member(user_id)
@@ -111,7 +111,7 @@ async def create_role_service(
     Returns:
         None
     """
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     kwargs = {"name": name}
@@ -141,7 +141,7 @@ async def edit_role_service(
     Returns:
         None
     """
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     role = guild.get_role(role_id)
@@ -168,7 +168,7 @@ async def delete_role_service(role_id: int):
     Returns:
         None
     """
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     role = guild.get_role(role_id)

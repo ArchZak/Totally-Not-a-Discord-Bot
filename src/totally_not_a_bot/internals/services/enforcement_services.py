@@ -12,7 +12,7 @@ from totally_not_a_bot.config.exceptions import (
 
 
 async def fetch_member(user_id: int):
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     member = guild.get_member(user_id)
@@ -55,7 +55,7 @@ async def ban_user_service(user_id: int, reason: Optional[str] = None):
 
 
 async def unban_user_service(user_id: int):
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     try:
@@ -71,7 +71,7 @@ async def move_user_service(user_id: int, target_channel_id: int):
     if (
         not channel
         or not isinstance(channel, discord.abc.GuildChannel)
-        or getattr(channel.guild, "id", None) != _client.target_guild_id
+        or getattr(channel.guild, "id", None) != _client.discord_bot_guild
     ):
         raise ChannelNotFoundError(
             f"Channel with ID {target_channel_id} not found in target guild."

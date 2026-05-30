@@ -18,7 +18,7 @@ async def get_category_info(category_id: int) -> Category:
     if (
         not category
         or not isinstance(category, discord.CategoryChannel)
-        or category.guild.id != _client.target_guild_id
+        or category.guild.id != _client.discord_bot_guild
     ):
         raise CategoryNotFoundError(
             "Category with the specified ID not found in the target guild."
@@ -29,7 +29,7 @@ async def get_category_info(category_id: int) -> Category:
 
 async def get_all_categories_info_service() -> list[Category]:
     """Get all categories and their information in the server."""
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
 
@@ -40,7 +40,7 @@ async def create_category_service(
     name: str, is_private: bool = False, allowed_role_ids: list[int] | None = None
 ):
     """Create a new category in the server."""
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
 
@@ -103,7 +103,7 @@ async def edit_category_service(
     if (
         not category
         or not isinstance(category, discord.CategoryChannel)
-        or category.guild.id != _client.target_guild_id
+        or category.guild.id != _client.discord_bot_guild
     ):
         raise CategoryNotFoundError(
             "Category with the specified ID not found in the target guild."
@@ -153,7 +153,7 @@ async def delete_category_service(category_id: int):
     if (
         not category
         or not isinstance(category, discord.CategoryChannel)
-        or category.guild.id != _client.target_guild_id
+        or category.guild.id != _client.discord_bot_guild
     ):
         raise CategoryNotFoundError(
             "Category with the specified ID not found in the target guild."
@@ -174,7 +174,7 @@ async def move_category_service(category_id: int, new_position: int):
     if (
         not category
         or not isinstance(category, discord.CategoryChannel)
-        or category.guild.id != _client.target_guild_id
+        or category.guild.id != _client.discord_bot_guild
     ):
         raise CategoryNotFoundError(
             "Category with the specified ID not found in the target guild."

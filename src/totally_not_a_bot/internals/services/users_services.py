@@ -9,7 +9,7 @@ from totally_not_a_bot.config.models import User
 
 
 async def get_user_info_service(user_id: int) -> Optional[User]:
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
 

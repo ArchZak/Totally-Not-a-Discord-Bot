@@ -21,7 +21,7 @@ def _get_category_or_raise(
     if (
         not category
         or not isinstance(category, discord.CategoryChannel)
-        or getattr(category.guild, "id", None) != _client.target_guild_id
+        or getattr(category.guild, "id", None) != _client.discord_bot_guild
     ):
         raise CategoryNotFoundError(
             "Category with the specified ID not found in the target guild."
@@ -54,7 +54,7 @@ async def get_channel_info_service(channel_id: int) -> Optional[Channel]:
     if (
         not channel
         or not isinstance(channel, discord.abc.GuildChannel)
-        or getattr(channel.guild, "id", None) != _client.target_guild_id
+        or getattr(channel.guild, "id", None) != _client.discord_bot_guild
     ):
         raise ChannelNotFoundError(
             "Channel with the specified ID not found in the target guild."
@@ -63,7 +63,7 @@ async def get_channel_info_service(channel_id: int) -> Optional[Channel]:
 
 
 async def get_all_channels_info_service() -> list[Channel]:
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
     return [channels_dto._convert_channel(c) for c in guild.channels]
@@ -76,7 +76,7 @@ async def create_channel_service(
     is_private: bool = False,
     allowed_role_ids: Optional[list[int]] = None,
 ) -> int:
-    guild = _client.get_guild(_client.target_guild_id)
+    guild = _client.get_guild(_client.discord_bot_guild)
     if not guild:
         raise GuildNotFoundError("Target guild not found or bot is not in it.")
 
@@ -113,7 +113,7 @@ async def edit_channel_service(
     if (
         not channel
         or not isinstance(channel, discord.abc.GuildChannel)
-        or getattr(channel.guild, "id", None) != _client.target_guild_id
+        or getattr(channel.guild, "id", None) != _client.discord_bot_guild
     ):
         raise ChannelNotFoundError(
             "Channel with the specified ID not found in the target guild."
@@ -157,7 +157,7 @@ async def delete_channel_service(channel_id: int):
     if (
         not channel
         or not isinstance(channel, discord.abc.GuildChannel)
-        or getattr(channel.guild, "id", None) != _client.target_guild_id
+        or getattr(channel.guild, "id", None) != _client.discord_bot_guild
     ):
         raise ChannelNotFoundError(
             "Channel with the specified ID not found in the target guild."
@@ -170,7 +170,7 @@ async def move_channel_service(channel_id: int, new_parent_id: int):
     if (
         not channel
         or not isinstance(channel, discord.abc.GuildChannel)
-        or getattr(channel.guild, "id", None) != _client.target_guild_id
+        or getattr(channel.guild, "id", None) != _client.discord_bot_guild
     ):
         raise ChannelNotFoundError(
             "Channel with the specified ID not found in the target guild."
@@ -185,7 +185,7 @@ async def set_channel_position_service(channel_id: int, position: int):
     if (
         not channel
         or not isinstance(channel, discord.abc.GuildChannel)
-        or getattr(channel.guild, "id", None) != _client.target_guild_id
+        or getattr(channel.guild, "id", None) != _client.discord_bot_guild
     ):
         raise ChannelNotFoundError(
             "Channel with the specified ID not found in the target guild."
