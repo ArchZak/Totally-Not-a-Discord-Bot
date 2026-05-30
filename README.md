@@ -2,9 +2,7 @@
 
 Totally-Not-a-Discord-Bot-MCP (Totally-not-a-Bot) is an MCP for agentic AIs to interact in discord servers with a particular focus on moderation and security. 
 
-I started this project because I wanted to become familiar with developing MCPs. I was able to struggle with certain architectural choices, logic, and other decisions that influenced the whole project. I was able to build many mental models about MCPs and agentic AI, and if I ever have to develop another MCP in the future, it'll go by way faster, and be a much more efficient process. 
-
-README will be finished once the project reaches a solid enough state, and could be reasonably used. Still need to implement the enforcement tools, create memory layers to combine tool calls / make bulk actions, test suite needs to be made using pytest and pytest-asyncio, containerization, and put in more CI workflows. 
+I started this project because I wanted to become familiar with developing MCPs. I was able to struggle with certain architectural choices, logic, and other decisions that influenced the whole project. I built many mental models about MCPs and agentic AIs, and if I ever have to develop another MCP in the future, it'll go by way faster, and be a much more efficient process. 
 
 ## Project Map
 
@@ -43,7 +41,7 @@ To locally run **Totally-not-a-Bot**, ensure you have the following prerequisite
 
 #### Local Repository Setup
 
-1. Set up your environment by copying the example file:
+1. Set up your .env by copying the example file:
    ```bash
    cp .env.example .env
    ```
@@ -94,9 +92,9 @@ graph TD
 - **Asynchronous Execution**: Built on `asyncio`. The Discord client (`discord.Client`) runs as a background task on the event loop while the FastMCP stdio loop runs on the main thread.
 - **FastMCP Layer**: Implements a declarative tool injection mechanism (`mcp.add_tool`), mapping Python functions directly to model-callable actions.
 - **Modular Components**:
-  - **Config Layer ([app.py](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/config/app.py))**: Manages model definitions, exception maps, and initializes the Discord client with `members` and `message_content` intents.
+  - **Config Layer ([app.py](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/config/app.py))**: Manages model definitions, exception maps, and initializes the Discord client with `members` and `message_content` intents necessary for moderation.
   - **Services Layer ([services](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/internals/services/))**: Business logic executing target operations inside Discord channels.
-  - **Tool Interfaces ([tools](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/tools/))**: Standardized, annotated boundaries parsing and serving model inputs/outputs cleanly and safely.
+  - **Tool Interfaces ([tools](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/tools/))**: Standardized and annotated boundaries parsing and serving model inputs/outputs cleanly and safely.
 
 ## MCP Integration Guide
 
@@ -185,7 +183,7 @@ Many more to come! This project is still in active development and I have a lot 
 
 ## Development Guide
 
-If you want to contribute features, improve existing APIs, or write your own MCP tools, follow the guidelines below.
+If you want to contribute features, improve existing APIs, or write your own MCP tools, follow the guidelines below. On top of that, I really encourage anyone to make their own contributions, it'd be super fun to look over and I'd be happy to help.
 
 ### Adding a New MCP Tool
 
@@ -215,12 +213,13 @@ All tools are declaration-driven via **FastMCP**, meaning your Python signatures
    
    mcp.add_tool(example_tool)
    ```
+3. **Service Layer**: Make sure to write the actual logic inside the service layer, and if you need to, make a dto for returning Pydantic models to the AI.
 
 ---
 
 ### Pixi Development Tasks
 
-We use **Pixi** for dependency management and reproducible development tasks. The following CLI commands are pre-configured:
+I use **Pixi** for dependency management and reproducible development tasks. The following CLI commands are pre-configured:
 
 | Command | Action | Details |
 | :--- | :--- | :--- |
@@ -234,11 +233,11 @@ We use **Pixi** for dependency management and reproducible development tasks. Th
 
 ## Contributing
 
-Please feel free to contribute to **Totally-not-a-Bot**! Since this project is still in active development and was intended as a learning journey, please keep that in mind. I am always open to suggestions, features, improvements, and potential bug fixes.
+Please feel free to contribute to **Totally-not-a-Bot**! Since this project is still in active development and was intended as a learning journey, please keep that in mind(I'm also a college student). I am always open to suggestions, features, improvements, and potential bug fixes.
 
-I will add tempates for issues and pull requests whenever I can, but for now I'll just say that I'd like to keep the PRs small and focused on a single change. Also, if you're adding a new MCP tool, please make sure to update the [tools.md](file:///Users/archzak/Desktop/totally-not-a-bot/docs/tools.md) file to include the new tool.
+I will add tempates for issues and pull requests whenever I can, but for now I'll just say that I'd like to keep the PRs small and focused on a single change. Also, if you're adding a new MCP tool, please make sure to update the tools table above to include the new tool.
 
-Before submitting any code, please run the formatting task to keep the repository tidy:
+Before submitting any code, please run the formatting task to keep the repository tidy. The branch can't be merged otherwise anyway:
 ```bash
 pixi run format
 ```
