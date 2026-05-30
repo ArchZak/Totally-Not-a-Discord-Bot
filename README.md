@@ -11,7 +11,7 @@ docs/
 |--tdd/tdd.md
 |--todo.md
 scripts/
-|--playground.py
+|--tests.py
 src/
 |   `totally_not_a_bot/
 |    `--config/
