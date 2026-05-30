@@ -36,7 +36,7 @@ src/
 To locally run **Totally-not-a-Bot**, ensure you have the following prerequisites installed on your system:
 
 - **Python**: Version `3.12` or higher (configured in `pixi.toml`).
-- **Pixi**: A [modern package manager](https://pixi.prefix.dev/latest/installation/) written in Rust, and it works like cargo.
+- **Pixi**: A [modern package manager](https://pixi.prefix.dev/latest/installation/).
 - **Discord Bot**: A [Discord Bot](https://discord.com/developers/applications) with the necessary permissions enabled (see the [Quick Start](#getting-a-discord-bot) guide below).
 
 #### Local Repository Setup
@@ -123,7 +123,7 @@ Add this to your `claude_desktop_config.json` (located at `~/Library/Application
 
 Ensure you replace `YOUR_DISCORD_BOT_TOKEN` and `YOUR_DISCORD_BOT_GUILD` with the actual ids or set them in your active system environment.
 
-## Current Tools`
+## Current Tools
 
 **Totally-not-a-Bot** exposes a wide range of Discord API tools to agentic models, organized by functional category:
 
