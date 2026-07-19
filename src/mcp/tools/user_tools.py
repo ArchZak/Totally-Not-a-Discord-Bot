@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from totally_not_a_bot.config.models import Embed
-from totally_not_a_bot.internals.services import users_services
+from mcp.config.models import Embed
+from mcp.internals.services import users_services
 
 
 async def get_user_info(

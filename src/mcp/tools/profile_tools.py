@@ -1,6 +1,6 @@
 from typing import Annotated, Literal
 
-from totally_not_a_bot.internals.services import profile_services
+from mcp.internals.services import profile_services
 
 
 async def set_bot_status(

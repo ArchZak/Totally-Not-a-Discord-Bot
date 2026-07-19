@@ -1,11 +1,11 @@
 from typing import Annotated
 
-from totally_not_a_bot.config.models import (
+from mcp.config.models import (
     Category,
     CategoryParam,
     ChannelParam,
 )
-from totally_not_a_bot.internals.services import category_services
+from mcp.internals.services import category_services
 
 
 async def get_category_info(

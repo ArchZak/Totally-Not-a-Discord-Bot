@@ -1,7 +1,7 @@
 from typing_extensions import Annotated
 
-from totally_not_a_bot.config.models import Role
-from totally_not_a_bot.internals.services import roles_services
+from mcp.config.models import Role
+from mcp.internals.services import roles_services
 
 
 async def get_all_roles() -> list[Role]:

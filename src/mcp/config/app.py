@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from fastmcp import FastMCP
 
-from totally_not_a_bot.config.discord_bot import TotallyNotABot
+from mcp.config.discord_bot import TotallyNotABot
 
 load_dotenv()
 

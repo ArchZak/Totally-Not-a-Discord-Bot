@@ -2,10 +2,10 @@ from typing import Optional
 
 import discord
 
-import totally_not_a_bot.internals.dto.users_dto as users_dto
-from totally_not_a_bot.config.app import _client
-from totally_not_a_bot.config.exceptions import GuildNotFoundError, MemberNotFoundError
-from totally_not_a_bot.config.models import User
+import mcp.internals.dto.users_dto as users_dto
+from mcp.config.app import _client
+from mcp.config.exceptions import GuildNotFoundError, MemberNotFoundError
+from mcp.config.models import User
 
 
 async def get_user_info_service(user_id: int) -> Optional[User]:

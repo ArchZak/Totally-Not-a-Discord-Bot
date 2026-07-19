@@ -1,13 +1,13 @@
 import discord
 
-import totally_not_a_bot.internals.dto.category_dto as category_dto
-import totally_not_a_bot.internals.services.channels_services as channels_services
-from totally_not_a_bot.config.app import _client
-from totally_not_a_bot.config.exceptions import (
+import mcp.internals.dto.category_dto as category_dto
+import mcp.internals.services.channels_services as channels_services
+from mcp.config.app import _client
+from mcp.config.exceptions import (
     CategoryNotFoundError,
     GuildNotFoundError,
 )
-from totally_not_a_bot.config.models import Category, ChannelParam
+from mcp.config.models import Category, ChannelParam
 
 # region Category Tools
 

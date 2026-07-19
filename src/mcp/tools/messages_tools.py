@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from totally_not_a_bot.config.models import Embed, Message
-from totally_not_a_bot.internals.services import messages_services
+from mcp.config.models import Embed, Message
+from mcp.internals.services import messages_services
 
 
 async def get_recent_messages(

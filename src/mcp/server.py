@@ -5,8 +5,8 @@ import sys
 from dotenv import load_dotenv
 from loguru import logger
 
-from totally_not_a_bot.config.app import _client, mcp
-from totally_not_a_bot.tools.category_tools import (
+from mcp.config.app import _client, mcp
+from mcp.tools.category_tools import (
     bulk_create_categories,
     bulk_delete_categories,
     bulk_edit_categories,
@@ -16,7 +16,7 @@ from totally_not_a_bot.tools.category_tools import (
     get_all_categories_info,
     move_category,
 )
-from totally_not_a_bot.tools.channels_tools import (
+from mcp.tools.channels_tools import (
     bulk_create_channels,
     bulk_delete_channels,
     bulk_edit_channels,
@@ -28,7 +28,7 @@ from totally_not_a_bot.tools.channels_tools import (
     move_channel,
     set_channel_position,
 )
-from totally_not_a_bot.tools.enforcement_tools import (
+from mcp.tools.enforcement_tools import (
     ban_user,
     disconnect_user,
     kick_user,
@@ -37,7 +37,7 @@ from totally_not_a_bot.tools.enforcement_tools import (
     unban_user,
     unmute_user,
 )
-from totally_not_a_bot.tools.messages_tools import (
+from mcp.tools.messages_tools import (
     add_reaction,
     delete_message,
     edit_embed,
@@ -51,8 +51,8 @@ from totally_not_a_bot.tools.messages_tools import (
     send_message,
     unpin_message,
 )
-from totally_not_a_bot.tools.profile_tools import set_bot_activity, set_bot_status
-from totally_not_a_bot.tools.role_tools import (
+from mcp.tools.profile_tools import set_bot_activity, set_bot_status
+from mcp.tools.role_tools import (
     assign_role_to_user,
     create_role,
     delete_role,
@@ -61,7 +61,7 @@ from totally_not_a_bot.tools.role_tools import (
     get_role_by_id,
     remove_role_from_user,
 )
-from totally_not_a_bot.tools.user_tools import (
+from mcp.tools.user_tools import (
     get_user_info,
     send_direct_message,
     send_direct_message_with_embed,

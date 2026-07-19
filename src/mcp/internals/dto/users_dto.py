@@ -1,6 +1,6 @@
 import discord
 
-from totally_not_a_bot.config.models import User
+from mcp.config.models import User
 
 
 def _convert_user(user: discord.Member | discord.User) -> User:

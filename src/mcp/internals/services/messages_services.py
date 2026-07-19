@@ -3,14 +3,14 @@ from typing import Optional
 
 import discord
 
-import totally_not_a_bot.internals.dto.channels_dto as channels_dto
-from totally_not_a_bot.config.app import _client
-from totally_not_a_bot.config.exceptions import (
+import mcp.internals.dto.channels_dto as channels_dto
+from mcp.config.app import _client
+from mcp.config.exceptions import (
     ChannelNotFoundError,
     MessageNotFoundError,
     MessageOwnershipError,
 )
-from totally_not_a_bot.config.models import Embed, Message
+from mcp.config.models import Embed, Message
 
 # region Message Tools
 
