@@ -2,14 +2,19 @@
 
 ## Priority items
 
+- [] letting agent access logs about players when doing enforcement
 - [] more bulk / combining actions
+    - [] enforcement: do punishment -> log it -> dm user
+
+## Slightly less priority items
+
 - [] enforcement
     - [] punish member
     - [] dm them informing them of punishment
     - [] create space for devs to incorporate their own infraction tracking system- [] duplicate category
 - [] issue and pr template
 
-# Eventual items
+## Eventual items
 
 - [] duplicate category and its channels
 - [] schedule server events
