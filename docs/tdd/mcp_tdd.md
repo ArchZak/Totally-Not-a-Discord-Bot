@@ -229,7 +229,9 @@ tnb/server/invites - active invite links
 
 ## Testing Plan
 
-If given to 5 LLMs, they should all act the same. if they dont then the interface is bad
+MAGICMOCK SUITE
+time_perf for suite
+learn async testing? idk what's the point?? idc about concurrent calls allat much... 
 
 ## Alternative Approaches
 
