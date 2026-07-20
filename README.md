@@ -13,17 +13,18 @@ docs/
 scripts/
 |--tests.py
 src/
-|   `totally_not_a_bot/
-|    `--config/
-|       |--app.py
-|       |--discord_bot.py
-|       |--exceptions.py
-|       |--models.py
-|    `--internals
-|       |--dto/
-|       |--services/
-|    `--tools/
+|--bot/
+|   |--internals/
+|   |--tools/
+|   |--app.py
+|   |--discord_bot.py
+|   |--exceptions.py
+|   |--models.py
+|--mcp/
 |   |--server.py
+|--rag/
+|   |--agent.py
+|   |--main.py
 |--.env.example
 |--.ruff.toml
 |--pixi.lock
@@ -78,23 +79,21 @@ This launches:
 
 ## Architecture
 
-**Totally-not-a-Bot** utilizes a multi-threaded asynchronous architecture designed to connect your AI agent to your Discord bot:
+**Totally-not-a-Bot** utilizes a multi-threaded asynchronous architecture designed to connect your AI agent to your Discord bot. The codebase is decoupled into three distinct pillars:
 
 ```mermaid
 graph TD
-    A[MCP Host / Client e.g. Claude Desktop] <-->|stdio Transport| B[FastMCP Server]
-    B <-->|Tool Execution| C[totally_not_a_bot.tools]
-    C <-->|Services Layer| D[totally_not_a_bot.internals.services]
-    D <-->|Discord Bot Connection| E[TotallyNotABot Client discord.py]
-    E <-->|Discord API| F[Discord Guild]
+    A[Discord API] <-->|Discord Bot Connection| B[bot.discord_bot]
+    B <-->|Services Layer| C[bot.internals.services]
+    C <-->|Tool Execution| D[bot.tools]
+    D <-->|Native Agent Loop| E[rag.agent]
+    D <-->|FastMCP Server| F[mcp.server]
+    F <-->|stdio Transport| G[External MCP Client]
 ```
 
-- **Asynchronous Execution**: Built on `asyncio`. The Discord client (`discord.Client`) runs as a background task on the event loop while the FastMCP stdio loop runs on the main thread.
-- **FastMCP Layer**: Implements a declarative tool injection mechanism (`mcp.add_tool`), mapping Python functions directly to model-callable actions.
-- **Modular Components**:
-  - **Config Layer ([app.py](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/config/app.py))**: Manages model definitions, exception maps, and initializes the Discord client with `members` and `message_content` intents necessary for moderation.
-  - **Services Layer ([services](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/internals/services/))**: Business logic executing target operations inside Discord channels.
-  - **Tool Interfaces ([tools](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/tools/))**: Standardized and annotated boundaries parsing and serving model inputs/outputs cleanly and safely.
+- **Core Bot (`src/bot/`)**: Manages model definitions, exception maps, and initializes the Discord client. The Services layer executes operations inside Discord, and the Tools layer provides standardized function wrappers.
+- **RAG Agent (`src/rag/`)**: Contains the native LangChain agent loop (`agent.py`) which processes Discord chat organically by directly invoking the `bot.tools` Python functions.
+- **MCP Server (`src/mcp/`)**: Implements a declarative tool injection mechanism using FastMCP, wrapping the native `bot.tools` functions to expose them over standard input/output (`stdio`) for external AI agents.
 
 ## MCP Integration Guide
 
@@ -189,7 +188,7 @@ If you want to contribute features, improve existing APIs, or write your own MCP
 
 All tools are declaration-driven via **FastMCP**, meaning your Python signatures and docstrings directly generate the schemas utilized by the agent:
 
-1. **Implement the Tool**: Open or create the appropriate tool module in `src/totally_not_a_bot/tools/` (e.g., `enforcement_tools.py`). Define an asynchronous function, using `typing.Annotated` to describe each parameter:
+1. **Implement the Tool**: Open or create the appropriate tool module in `src/bot/tools/` (e.g., `enforcement_tools.py`). Define an asynchronous function, using `typing.Annotated` to describe each parameter:
    ```python
    from typing import Annotated
    
@@ -207,9 +206,9 @@ All tools are declaration-driven via **FastMCP**, meaning your Python signatures
        # Your implementation logic using client services
        return "Success details"
    ```
-2. **Register the Tool**: Open [src/totally_not_a_bot/server.py](file:///Users/archzak/Desktop/totally-not-a-bot/src/totally_not_a_bot/server.py), import your function, and add it to the MCP instance:
+2. **Register the Tool**: Open [src/mcp/server.py](file:///Users/archzak/Desktop/totally-not-a-bot/src/mcp/server.py), import your function, and add it to the MCP instance:
    ```python
-   from totally_not_a_bot.tools.enforcement_tools import example_tool
+   from bot.tools.enforcement_tools import example_tool
    
    mcp.add_tool(example_tool)
    ```

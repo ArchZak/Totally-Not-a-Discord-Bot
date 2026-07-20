@@ -55,4 +55,4 @@ class TotallyNotABot(discord.Client):
             )
 
         except Exception as _:
-            logger.error(f"Error processing message")
+            logger.error("Error processing message")
