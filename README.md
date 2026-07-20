@@ -1,6 +1,6 @@
 # Totally-Not-a-Discord-Bot-MCP
 
-Totally-Not-a-Discord-Bot-MCP (Totally-not-a-Bot) is an MCP for agentic AIs to interact in discord servers with a particular focus on moderation and security. 
+Totally-Not-a-Discord-Bot (Totally-not-a-Bot) is an agent loop + MCP server for agentic AIs to interact in discord servers with a particular focus on moderation and security. 
 
 I started this project because I wanted to become familiar with developing MCPs. I was able to struggle with certain architectural choices, logic, and other decisions that influenced the whole project. I built many mental models about MCPs and agentic AIs, and if I ever have to develop another MCP in the future, it'll go by way faster, and be a much more efficient process. 
 
