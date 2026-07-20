@@ -1,5 +1,6 @@
-from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain.agents import create_agent
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
 
 async def build_agent():
     client = MultiServerMCPClient(
@@ -7,7 +8,9 @@ async def build_agent():
             "discord": {
                 "transport": "stdio",
                 "command": "python",
-                "args": ["/abs/path/to/totally-not-a-bot/src/mcp/server.py"], #needs abs path according to langchain docs
+                "args": [
+                    "/abs/path/to/totally-not-a-bot/src/mcp/server.py"
+                ],  # needs abs path according to langchain docs
             },
         }
     )
