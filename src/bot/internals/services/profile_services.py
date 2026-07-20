@@ -2,7 +2,7 @@ from typing import Literal
 
 import discord
 
-from mcp.config.app import _client
+from bot.app import _client
 
 # region Profile Tools
 

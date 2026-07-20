@@ -1,6 +1,6 @@
 import discord
 
-from mcp.config.models import Channel
+from bot.models import Channel
 
 
 def _convert_channel(channel: discord.abc.GuildChannel) -> Channel:

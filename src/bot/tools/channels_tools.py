@@ -1,7 +1,7 @@
 from typing import Annotated, Literal, Optional
 
-from mcp.config.models import Channel, ChannelEditParam, ChannelParam
-from mcp.internals.services import channels_services
+from bot.internals.services import channels_services
+from bot.models import Channel, ChannelEditParam, ChannelParam
 
 
 async def get_channel_info(

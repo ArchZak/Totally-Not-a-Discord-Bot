@@ -2,14 +2,14 @@ from typing import Literal, Optional
 
 import discord
 
-import mcp.internals.dto.channels_dto as channels_dto
-from mcp.config.app import _client
-from mcp.config.exceptions import (
+import bot.internals.dto.channels_dto as channels_dto
+from bot.app import _client
+from bot.exceptions import (
     CategoryNotFoundError,
     ChannelNotFoundError,
     GuildNotFoundError,
 )
-from mcp.config.models import Channel
+from bot.models import Channel
 
 # region Channel Tools
 

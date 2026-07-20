@@ -1,13 +1,13 @@
 import discord
 
-import mcp.internals.dto.category_dto as category_dto
-import mcp.internals.services.channels_services as channels_services
-from mcp.config.app import _client
-from mcp.config.exceptions import (
+import bot.internals.dto.category_dto as category_dto
+import bot.internals.services.channels_services as channels_services
+from bot.app import _client
+from bot.exceptions import (
     CategoryNotFoundError,
     GuildNotFoundError,
 )
-from mcp.config.models import Category, ChannelParam
+from bot.models import Category, ChannelParam
 
 # region Category Tools
 

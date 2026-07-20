@@ -3,8 +3,8 @@ from typing import Optional
 
 import discord
 
-from mcp.config.app import _client
-from mcp.config.exceptions import (
+from bot.app import _client
+from bot.exceptions import (
     ChannelNotFoundError,
     GuildNotFoundError,
     MemberNotFoundError,

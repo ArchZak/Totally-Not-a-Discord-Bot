@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from mcp.config.models import Embed, Message
-from mcp.internals.services import messages_services
+from bot.internals.services import messages_services
+from bot.models import Embed, Message
 
 
 async def get_recent_messages(

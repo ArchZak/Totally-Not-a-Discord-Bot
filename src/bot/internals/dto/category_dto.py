@@ -1,6 +1,6 @@
 import discord
 
-from mcp.config.models import Category, Channel
+from bot.models import Category, Channel
 
 
 def _convert_category(category: discord.CategoryChannel) -> Category:

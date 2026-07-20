@@ -1,6 +1,6 @@
 import discord
 
-from mcp.config.models import Role
+from bot.models import Role
 
 
 def _convert_role(role: discord.Role) -> Role:

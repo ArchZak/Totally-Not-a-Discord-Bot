@@ -1,6 +1,6 @@
 from typing import Annotated, Optional
 
-from mcp.internals.services import enforcement_services
+from bot.internals.services import enforcement_services
 
 
 async def mute_user(

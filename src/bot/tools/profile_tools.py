@@ -1,6 +1,6 @@
 from typing import Annotated, Literal
 
-from mcp.internals.services import profile_services
+from bot.internals.services import profile_services
 
 
 async def set_bot_status(

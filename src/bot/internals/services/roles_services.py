@@ -1,13 +1,13 @@
 import discord
 
-import mcp.internals.dto.roles_dto as roles_dto
-from mcp.config.app import _client
-from mcp.config.exceptions import (
+import bot.internals.dto.roles_dto as roles_dto
+from bot.app import _client
+from bot.exceptions import (
     GuildNotFoundError,
     MemberNotFoundError,
     RoleNotFoundError,
 )
-from mcp.config.models import Role
+from bot.models import Role
 
 # region Roles Tools
 
