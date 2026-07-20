@@ -65,17 +65,21 @@ You'll need to set up your own Discord application for your MCP to access:
 6. Set this as `DISCORD_BOT_GUILD` in your `.env` file
 7. Make sure that you have enabled all intents -> bot tab
 
-### Starting the MCP Server
+### Starting the Application
 
-Once your `.env` file has your bot token and guild id, you can launch both the Discord bot and the stdio MCP server using Pixi for local development:
+Once your `.env` file has your bot token and guild id, you can launch the application using Pixi. You can choose to run either the MCP Server or the Autonomous Bot using the available commands:
 
+#### 1. Standalone MCP Server
+To expose the bot's tools via standard input/output (`stdio`) for external AI clients (like Claude Desktop) without the bot autonomously acting:
 ```bash
-pixi run dev
+pixi run mcp
 ```
 
-This launches:
-1. An asynchronous Discord Bot client connection to your designated guild.
-2. A local Model Context Protocol (MCP) server listening over standard input/output (`stdio`).
+#### 2. Standalone Autonomous Bot
+To run the bot with its native LangChain loop managing the server autonomously, without exposing the MCP server:
+```bash
+pixi run bot
+```
 
 ## Architecture
 
@@ -109,7 +113,7 @@ Add this to your `claude_desktop_config.json` (located at `~/Library/Application
       "command": "pixi",
       "args": [
         "run",
-        "dev"
+        "mcp"
       ],
       "env": {
         "DISCORD_BOT_TOKEN": "YOUR_DISCORD_BOT_TOKEN",
@@ -223,7 +227,8 @@ I use **Pixi** for dependency management and reproducible development tasks. The
 | Command | Action | Details |
 | :--- | :--- | :--- |
 | `pixi install` | Install Dependencies | Initializes the virtual environment and syncs all libraries. |
-| `pixi run dev` | Start Server | Spins up the Discord bot client and opens the stdio MCP server. |
+| `pixi run mcp` | Start MCP Server | Spins up the Discord client and opens the stdio MCP server (native agent disabled). |
+| `pixi run bot` | Start Bot | Spins up the autonomous Discord client with the native LangChain agent (MCP disabled). |
 | `pixi run format` | Auto-format & Lint | Runs `ruff` to automatically format import ordering and syntax styling. |
 | `pixi run testscript` | Run Test Script | Executes `scripts/tests.py` to verify server functionality. |
 | `pixi add <pkg>` | Add Dependency | Installs a library and locks its version in `pixi.toml` / `pixi.lock`. |

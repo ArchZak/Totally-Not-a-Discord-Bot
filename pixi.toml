@@ -19,9 +19,15 @@ format = { cmd = [
     ".ruff.toml",
     "./"
 ]}
-mcp_dev = { cmd = [
+mcp = { cmd = [
     "python",
-    "src/mcp/server.py"
+    "src/mcp/server.py",
+    "--no-agent"
+] }
+bot = { cmd = [
+    "python",
+    "src/mcp/server.py",
+    "--no-mcp"
 ] }
 testscript = { cmd = [
     "python",

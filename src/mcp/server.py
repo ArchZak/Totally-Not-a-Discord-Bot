@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import os
 import sys
@@ -143,6 +144,17 @@ logger.add(sys.stderr, level="INFO")
 
 
 async def main():
+    parser = argparse.ArgumentParser(description="Run Totally-Not-A-Bot")
+    parser.add_argument(
+        "--no-agent",
+        action="store_true",
+        help="Disable the native autonomous agent loop",
+    )
+    parser.add_argument(
+        "--no-mcp", action="store_true", help="Disable the FastMCP stdio server"
+    )
+    args = parser.parse_args()
+
     load_dotenv()
     token = os.getenv("DISCORD_BOT_TOKEN")
 
@@ -150,14 +162,25 @@ async def main():
         logger.error("Missing DISCORD_BOT_TOKEN in .env")
         return
 
+    if args.no_agent:
+        _client.enable_agent = False
+        logger.info("Native agent loop is disabled")
+
     # Spin up discord bot on nonblocking thread using start
     asyncio.create_task(_client.start(token))
     logger.info("Spinning up Discord Bot")
 
     try:
-        # Run MCP server on main thread over stdio
-        logger.info("MCP Server starting over stdio")
-        await mcp.run_async(transport="stdio")
+        if not args.no_mcp:
+            # Run MCP server on main thread over stdio
+            logger.info("MCP Server starting over stdio")
+            await mcp.run_async(transport="stdio")
+        else:
+            logger.info("Running native agent loop")
+            while True:
+                await asyncio.sleep(3600)
+    except asyncio.CancelledError:
+        pass
     except Exception as e:
         logger.error(f"Error: {e}")
     finally:
