@@ -10,7 +10,7 @@ class TotallyNotABot(discord.Client):
     """
 
     def __init__(self, discord_bot_guild: int):
-        # We store the guild ID for potential future slash command registration
+        # store the guild ID for potential future slash command registration
         self.discord_bot_guild = discord_bot_guild
 
         intents = discord.Intents.default()
@@ -28,7 +28,7 @@ class TotallyNotABot(discord.Client):
         if self.agent is None:
             try:
                 self.agent = await build_native_agent()
-                logger.info("Native LangChain Agent initialized in the Discord Bot.")
+                logger.info("Agent initialized in the Discord Bot.")
             except Exception as e:
                 logger.error(f"Failed to initialize the LangChain Agent: {e}")
 
